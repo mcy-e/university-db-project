@@ -34,6 +34,12 @@ All this is  to make sure we have a better understanding specially in the techni
 ## Database Schema and Structure
 
 The database consists of **eight interconnected tables** that model the educational institution's data requirements. The schema demonstrates proper relational design with clear entity separation, foreign key relationships, and data integrity constraints.
+### Entity-Relationship Diagram 
+
+*'using classical Chen notation'.*
+
+![ER Diagram](Current_ERD.png)
+
 
 ### Entity-Relationship Overview
 
