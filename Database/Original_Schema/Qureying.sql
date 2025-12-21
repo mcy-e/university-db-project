@@ -158,8 +158,11 @@ ORDER BY reserv_date ASC;
 
 --* 22. On which dates are all rooms reserved?
 
-SELECT reserv_date FROM reservation WHERE reserv_date IN 
-(SELECT reserv_date FROM reservation WHERE roomno ='022'AND roomno ='020' AND roomno ='301');
+SELECT reserv_date
+FROM reservation
+WHERE roomno IN ('022','020','301')
+GROUP BY reserv_date
+HAVING COUNT(DISTINCT roomno) = 3;
 
 
 --* 23. Provide 5 examples including update clause.
