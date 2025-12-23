@@ -43,6 +43,8 @@ The database consists of **eight interconnected tables** that model the educatio
 
 ### Entity-Relationship Overview
 
+*'using simplified Chen notation'.*
+
 ```mermaid
 flowchart LR
     %% =======================
@@ -77,7 +79,6 @@ flowchart LR
     Instructor["Instructor
     ─────────────
     PK Instructor_ID
-    Department_ID
     Last_Name
     First_Name
     Rank
