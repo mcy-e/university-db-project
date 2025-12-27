@@ -6,22 +6,20 @@
     Settings button
 
 """
-    
-
 
 #& imports
 from PyQt6.QtCore import Qt
 
-from PyQt6.QtWidgets import (
-    QMainWindow,
-    QVBoxLayout,
-    QWidget,
-    QHBoxLayout,
-    QPushButton,
-    QSizePolicy,
-    QGridLayout,
-    QLabel,
-    QSpacerItem)
+from PyQt6.QtWidgets import QMainWindow, QStackedWidget
+
+from GUI.screens.home_screen import HomeScreen
+from GUI.screens.crud_menu_screen import CRUDMenuScreen
+from GUI.crud.student_crud import StudentCRUD
+from UTILS.screen_enum import Screens
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 #* Main Window class
 class MainWindow (QMainWindow):
@@ -32,124 +30,81 @@ class MainWindow (QMainWindow):
         
         #* Window Min Size
         self.setMinimumSize(600, 600)
-
-
-        #* Create BoxLayout instance
-        layout= QVBoxLayout()
-        layout.addSpacing(10)
-        layout.setContentsMargins(20,10,20,10)
+        self.stacked_widget = QStackedWidget()
         
-        #* Create widget instance
-        widget=QWidget()
-
-        #* Create the the parent which holds everything
-        holder=QVBoxLayout()
-        holder.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addLayout(holder)
+        #* Create home screen
+        self.home_screen = HomeScreen()
         
-        #* Add the elements (top bar, button grid,settings button)
+        #* Create CRUD Menu Screen
+        self.crud_menu=CRUDMenuScreen()
+
+        #* Create Student Crud screen
+        self.student_crud=StudentCRUD()
+
+        #* Add to stack
+        self.stacked_widget.addWidget(self.home_screen) 
+        self.stacked_widget.addWidget(self.crud_menu) 
+        self.stacked_widget.addWidget(self.student_crud) 
+         
         
-        holder.addLayout(TopBar(),stretch=1)        
-        holder.addLayout(ButtonsGrid(),stretch=2)
-        holder.addLayout(SettingsButton(),stretch=1)
-        
+        #* Connect signals
+        self._connect_home_signals()
 
-        #* Set the layout for the widget
-        widget.setLayout(layout)
+        self._connect_back_buttons()
 
-        #* Set the Main Widget for the Main Window
-        self.setCentralWidget(widget)
-
-class ButtonsGrid(QGridLayout):
-    def __init__(self):
-        super().__init__()
-
-        #* Setting alignment
-        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
-        #* Add Spacing
-        self.setSpacing(10)
-
-        #* Columns and Rows for the Grid layout to configure it
-        positions = [
-            (0, 0), (0, 1),
-            (1, 0), (1, 1),
-            (2, 0), (2, 1)
-        ]
-
-        #* Text to put on buttons (don't judge the ui for now we still not focusing on style)
-        btn_text=[
-            "CRUD Operations",
-            "Academic Management",
-            "Student Performance",
-            "Results Processing",
-            "Query Results",
-            "Audit Log"
-        ]
-        for i,(row,col) in enumerate(positions):
-
-            #* Push button instance
-            btn=QPushButton(btn_text[i])
-
-            #* Setting size policy to handle the hight and make width responsive (stretching with the screen)
-            btn.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Fixed)
-            
-            #* Range of manual hight sizing
-            btn.setMinimumHeight(100)
-            btn.setMaximumHeight(200)
-
-            #* Adding the btn to the Grid
-            self.addWidget(btn,row,col)
-        
-class SettingsButton(QHBoxLayout):
-    def __init__(self):
-        super().__init__()
-
-        #* Setting alignment
-        self.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
-        #* Padding
-        self.setContentsMargins(10,10,10,10)
-
-        #* Push button instance
-        btn=QPushButton("Settings")
+        #* Set as central widget
+        self.setCentralWidget(self.stacked_widget)
     
-        #* Size Policies
-        btn.setSizePolicy(QSizePolicy.Policy.Fixed,QSizePolicy.Policy.Fixed)
+    def _connect_back_buttons(self):
+
+        #? Connect all back navigation buttons
         
-        #* Manual Hight Sizing Range
-        btn.setMinimumHeight(60)
-        btn.setMaximumHeight(70)
+        back_map = {
+            self.crud_menu.go_back: (Screens.HOME,"Home Screen Back"),
+            self.student_crud.go_back: (Screens.CRUD_MENU,"CRUD Menu Back"),
+        }
 
-        #* Manual Width Sizing Range
-        btn.setMinimumWidth(400)
-        btn.setMaximumWidth(800)
-
-        #* Adding the btn to the Layout
-        self.addWidget(btn)
-
-class TopBar(QHBoxLayout):
-    def __init__(self):
-        super().__init__()
-
-        #* Push button instance
-        # TODO : Change the text and instead use an icon
-        btn=QPushButton("☰")
-
-        #* Label instance for the title
-        title=QLabel("University Management System")
+        for signal, (screen, log_msg) in back_map.items():
+            signal.connect(lambda s=screen, m=log_msg: self._navigate(s, m))
         
-        #* Fixed width for the button so it doesn't go beyond it 
-        btn.setFixedWidth(80)
 
-        #* Size policy
-        btn.setSizePolicy(QSizePolicy.Policy.Fixed,QSizePolicy.Policy.Expanding)
+   
+    def _connect_home_signals(self):
+
+        #? Connect all home screen navigation buttons
+
+        navigation_map = {
+            self.home_screen.navigate_to_crud: (Screens.CRUD_MENU, "CRUD menu"),
+            self.home_screen.navigate_to_academic: (None, "Academic menu"),
+            self.home_screen.navigate_to_performance: (None, "Performance menu"),
+            self.home_screen.navigate_to_results: (None, "Results menu"),
+            self.home_screen.navigate_to_queries: (None, "Queries menu"),
+            self.home_screen.navigate_to_audit: (None, "Audit menu"),
+            self.home_screen.navigate_to_settings: (None, "Settings"),
+            self.home_screen.open_side_bar: (None, "Side Bar"),
+            self.crud_menu.navigate_to_student_crud:(Screens.STUDENT_CRUD,"Student CRUD Screen"),
+            self.crud_menu.navigate_to_instructor_crud: (None, "Instructor CRUD Screen"),
+            self.crud_menu.navigate_to_course_crud: (None, "Course CRUD Screen"),
+            self.crud_menu.navigate_to_department_crud: (None, "Department CRUD Screen"),
+            self.crud_menu.navigate_to_room_crud: (None, "Room CRUD Screen"),
+            self.crud_menu.navigate_to_reservation_crud: (None, "Reservation CRUD Screen"),
+            self.crud_menu.navigate_to_enrollment_crud: (None, "Enrollment CRUD Screen"),
+            self.crud_menu.navigate_to_mark_crud: (None, "Mark CRUD Screen"),
+            self.crud_menu.navigate_to_section_crud: (None, "Section CRUD Screen"),
+            self.crud_menu.navigate_to_group_crud: (None, "Group CRUD Screen"),
+            self.crud_menu.navigate_to_activity_crud: (None, "Activity CRUD Screen"),
+            self.crud_menu.navigate_to_exam_crud: (None, "Exam CRUD Screen"),
+            self.crud_menu.navigate_to_attendance_crud: (None, "Attendance CRUD Screen"),
+
+        }
         
-        #* Adding the btn to the Layout with aligning it on top
-        self.addWidget(btn,alignment=Qt.AlignmentFlag.AlignTop)
+        for signal, (screen, log_msg) in navigation_map.items():
+            signal.connect(lambda s=screen, m=log_msg: self._navigate(s, m))
 
-        #* Adding the label to the Layout 
-        self.addWidget(title,alignment=Qt.AlignmentFlag.AlignCenter)
-
-
+    def _navigate(self, screen_index, log_message):
         
+        #? Navigate and Generate Log Message
+
+        logger.debug(f"Opening {log_message}...")
+        if screen_index is not None:
+            self.stacked_widget.setCurrentIndex(screen_index)
