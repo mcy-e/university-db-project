@@ -1,9 +1,9 @@
 -- create an enum for activity
-create type Activity_type as enum('lecture','toturiol','practical')
+create type Activity_type as enum('lecture','toturiol','practical');
 
 --create an enum for attendence
 
-create type status as enum('present', 'absent')
+create type status as enum('present', 'absent');
 
 -- activity table
 create table activity (
