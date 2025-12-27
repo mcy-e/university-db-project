@@ -40,6 +40,7 @@ create table exam(
 create table student_takes_an_exam (
     exam_id int not null,
     student_id int not null,
+    statu status NOT NULL,
     primary key (exam_id,student_id),
     constraint exam_fk
        FOREIGN key(exam_id)
@@ -67,13 +68,4 @@ CREATE TABLE attendance_to_activities (
     FOREIGN KEY (activity_id)
         REFERENCES activity(activity_id)
         ON DELETE CASCADE
-);
-
-create TABLE student_takes_exam (
-    student_id INT,
-    exam_id INT,
-    statu status NOT NULL,
-    PRIMARY KEY (student_id, exam_id),
-    FOREIGN KEY (student_id) REFERENCES student(student_id),
-    FOREIGN KEY (exam_id) REFERENCES exam(exam_id)
 );

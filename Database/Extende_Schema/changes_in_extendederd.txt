@@ -1,0 +1,5 @@
+we added activity relation,exam relation,student_takes_an_exam  relation , attendence table
+
+created two enums like new types activity_type for the activity type and status type for for the attendence or the abscence of the student_takes_an_exam
+
+for the section and the group are added to the student as an attributes
