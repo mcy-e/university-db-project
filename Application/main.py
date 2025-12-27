@@ -15,6 +15,14 @@ from GUI.main_window import MainWindow
 
 from PyQt6.QtWidgets import QApplication
 
+from UTILS.log import setup_logging
+import logging
+
+setup_logging()
+
+logger = logging.getLogger(__name__)
+logger.info("Application started")
+
 def _set_app_window_style(App:object):
     App.setStyle("windows11")
 
