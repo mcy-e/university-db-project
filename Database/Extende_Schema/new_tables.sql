@@ -69,3 +69,29 @@ CREATE TABLE attendance_to_activities (
         REFERENCES activity(activity_id)
         ON DELETE CASCADE
 );
+
+-- add group and section into students as an attribute
+
+alter table student
+add column group_id int ;
+
+alter table student
+add column section_id VARCHAR(1);
+
+     --adding data then adding not null
+ update  student
+ set group_id =1
+ where student_id in (1,3,6);
+ update  student
+ set group_id =1
+ where student_id in (2,4,5);
+     
+alter table student
+alter column group_id set not null;
+
+update  student
+set section_id='A';
+
+alter table student
+alter column section_id set not null;
+
