@@ -1,4 +1,4 @@
---get_students_by_group(group_id)
+--1-get_students_by_group(group_id)
 
 CREATE function get_students_by_group (gid int) 
 returns table (student_id int , last_name text , first_name text)
@@ -8,7 +8,7 @@ WHERE s.group_id=gid;
 $$
 LANGUAGE sql;
 
---get_students_by_section(section_id)
+--2-get_students_by_section(section_id)
 
 create function get_students_by_section(se_id text)
 returns table(student_id int , last_name text , first_name text)
@@ -19,7 +19,7 @@ $$
 LANGUAGE sql;
 
 
---get_instructor_timetable(instructor_id)
+--3-get_instructor_timetable(instructor_id)
 
 create function get_instructor_timetable(inst_id int)
 RETURNS table(reserv_date  DATE , start_time TIME , end_time TIME)
@@ -30,7 +30,7 @@ WHERE r.instructor_id=inst_id;
 $$
 LANGUAGE sql;
 
---get_student_timetable( group_id)
+--4-get_student_timetable( group_id)
 
 create function get_student_timetable_group( gr_id int)
 returns table (reserv_date  DATE , start_time TIME , end_time TIME)
@@ -49,7 +49,7 @@ $$
 LANGUAGE sql;
 
 
---get_student_timetable(section_id)
+--5-get_student_timetable(section_id)
 
 create function get_student_timetable_section(sect_id text)
 returns table (reserv_date  DATE , start_time TIME , end_time TIME)
@@ -67,7 +67,7 @@ where (r.course_id ,r.department_id) in (
 $$
 LANGUAGE sql;
 
---calculate_student_grade(student_id, course_id)
+--6-calculate_student_grade(student_id, course_id)
 
 create function calculate_student_grade(stu_id int, cou_id int , dep_id int)
 returns numeric
@@ -77,18 +77,9 @@ as $$
 $$
 LANGUAGE sql;
 
---get_students_passed_semester()
 
-create function get_students_passed_semester()
-returns table(student_id int , f_name text, l_name text)
-as $$
 
-  
-
-$$
-LANGUAGE sql
-
---The list of disqualifying mark by module
+--7-The list of disqualifying mark by module
 
 CREATE function disqualifying_mark_by_course()
 RETURNS table (disqualifying_mark numeric , cou_id int , dep_id int)
@@ -101,7 +92,7 @@ group by course_id,department_id ;
 $$
 LANGUAGE sql;
 
---The list of the average marks by course 
+---9The list of the average marks by course 
 
 CREATE function avg_mark_by_course()
 RETURNS table (disqualifying_mark numeric , cou_id int , dep_id int)
@@ -114,7 +105,7 @@ group by course_id,department_id ;
 $$
 LANGUAGE sql;
 
---The list of the average marks  by group
+--10-The list of the average marks  by group
 
 create function avg_mark_by_group()
 returns table(avg_mark numeric , gr_id int , se_id varchar(1))
@@ -126,16 +117,47 @@ $$
 LANGUAGE sql;
 
 
---) The students who received a failing grade in a module.
+---11- The students who received a failing grade in a module.
 
-create function tudents_who_received_a_failing_grade_in_a_module()
-returns table(student_id int , course_id int , department_id int)
+create function students_who_received_a_failing_grade_in_a_module()
+returns table(stud_id int  , course_id int , department_id int, mark_value numeric , disqualifying_mark numeric)
 as $$
 
-SELECT * from mark join student on mark.student_id=student.section_id
-where course_id
+select mark.student_id,course_id, department_id,mark_value,disqualifying_mark
+from mark
+join student  on mark.student_id=student.student_id
+join disqualifying_mark_by_course() d on (mark.course_id,mark.department_id)= row(d.cou_id,d.dep_id)
+where mark.mark_value <= d.disqualifying_mark;
 
 $$
-LANGUAGE sql
+LANGUAGE sql;
 
---get_students_passed_semester()
+--12-get_students_passed_semester()
+
+CREATE function get_students_passed_semester()
+RETURNS table (stu_id int)
+as $$
+
+SELECT student_id 
+from student
+WHERE student_id not in( SELECT stud_id
+                          from students_who_received_a_failing_grade_in_a_module()                            
+);
+
+$$
+LANGUAGE sql;
+
+
+--13-get_average_marks_by_course_group()
+
+CREATE function get_average_marks_by_course_group()
+returns table (avg_mark numeric , cou_id int , d_id int , g_id int , s_id text)
+as $$
+
+select avg(mark.mark_value),mark.course_id,mark.department_id , student.group_id , student.section_id
+FROM mark
+join student on mark.student_id=student.student_id
+group by mark.course_id,mark.department_id , student.group_id , student.section_id ;
+
+$$
+LANGUAGE sql;

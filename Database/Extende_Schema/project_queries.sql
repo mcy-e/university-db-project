@@ -20,7 +20,7 @@ SELECT * from get_student_timetable_section( gr_id int);
 
 --(e) The list of students who passed the semester.
 
-
+SELECT * from get_students_passed_semester();
 
 --(f) The list of disqualifying mark by module.
 
@@ -32,9 +32,12 @@ SELECT * from avg_mark_by_course();
 
 --(h) The students who received a failing grade in a module.
 
+SELECT * from students_who_received_a_failing_grade_in_a_module();
 
 --(i) The students eligible for a resit in a module.
 
 
 
 --(j) List of students excluded from the module
+
+
