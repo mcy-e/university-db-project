@@ -1,3 +1,14 @@
+--15- get_average_of_students()
+
+create function  get_average_of_students()
+returns table(stu_id int , average numeric )
+as $$
+select student_id,avg(mark_value)
+from mark
+group by student_id;
+$$
+LANGUAGE sql ;
+
 --1-get_students_by_group(group_id)
 
 CREATE function get_students_by_group (gid int) 
@@ -117,6 +128,36 @@ $$
 LANGUAGE sql;
 
 
+
+--13-get_average_marks_by_course_group()
+
+CREATE function get_average_marks_by_course_group()
+returns table (avg_mark numeric , cou_id int , d_id int , g_id int , s_id text)
+as $$
+
+select avg(mark.mark_value),mark.course_id,mark.department_id , student.group_id , student.section_id
+FROM mark
+join student on mark.student_id=student.student_id
+group by mark.course_id,mark.department_id , student.group_id , student.section_id ;
+
+$$
+LANGUAGE sql;
+
+
+--14-get_List_of_students_AND_the_num_of_abcsence_from_the_module()
+
+CREATE function get_List_of_students_AND_the_num_of_abcsence_from_the_module()
+returns table (stu_id int,number_of_abscence int,  cou_id int , dep_id int)
+as $$
+SELECT attendance_to_activities.student_id ,count(attendance_to_activities.statu),course_id,department_id
+from  activity 
+join attendance_to_activities on activity.activity_id=attendance_to_activities.activity_id
+WHERE attendance_to_activities.statu='absent' 
+group by attendance_to_activities.student_id,activity.course_id,activity.department_id;
+$$
+LANGUAGE sql;
+
+
 ---11- The students who received a failing grade in a module.
 
 create function students_who_received_a_failing_grade_in_a_module()
@@ -137,27 +178,20 @@ LANGUAGE sql;
 CREATE function get_students_passed_semester()
 RETURNS table (stu_id int)
 as $$
-
 SELECT student_id 
 from student
-WHERE student_id not in( SELECT stud_id
-                          from students_who_received_a_failing_grade_in_a_module()                            
-);
-
-$$
-LANGUAGE sql;
-
-
---13-get_average_marks_by_course_group()
-
-CREATE function get_average_marks_by_course_group()
-returns table (avg_mark numeric , cou_id int , d_id int , g_id int , s_id text)
-as $$
-
-select avg(mark.mark_value),mark.course_id,mark.department_id , student.group_id , student.section_id
-FROM mark
-join student on mark.student_id=student.student_id
-group by mark.course_id,mark.department_id , student.group_id , student.section_id ;
-
+WHERE 
+student_id not in( SELECT stud_id
+ from students_who_received_a_failing_grade_in_a_module()                           
+)
+and
+student_id not in(
+    select stu_id
+    from get_average_of_students()
+    where average <10
+)
+and student_id not in(
+    select stu_id from get_List_of_students_AND_the_num_of_abcsence_from_the_module() where number_of_abscence>5;
+)
 $$
 LANGUAGE sql;

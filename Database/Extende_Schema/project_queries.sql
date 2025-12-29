@@ -34,10 +34,13 @@ SELECT * from avg_mark_by_course();
 
 SELECT * from students_who_received_a_failing_grade_in_a_module();
 
---(i) The students eligible for a resit in a module.
+--(i) The students eligible for a resit.
+
+SELECT * from student where student_id not in (select * from get_students_passed_semester()); 
 
 
 
 --(j) List of students excluded from the module
 
+select * from get_List_of_students_AND_the_num_of_abcsence_from_the_module() where number_of_abscence>5;
 
