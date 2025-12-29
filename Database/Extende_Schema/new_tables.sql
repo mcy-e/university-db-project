@@ -95,3 +95,21 @@ set section_id='A';
 alter table student
 alter column section_id set not null;
 
+ 
+-- Create  mark_Audit_Log table
+
+CREATE TABLE mark_Audit_Log (
+LogID SERIAL PRIMARY KEY,
+OperationType VARCHAR(50) NOT NULL,
+OperationTime TIMESTAMP NOT NULL,
+Description TEXT
+);
+
+-- Create  attendance_Audit_Log table
+
+CREATE TABLE attendance_Audit_Log (
+LogID SERIAL PRIMARY KEY,
+OperationType VARCHAR(50) NOT NULL,
+OperationTime TIMESTAMP NOT NULL,
+Description TEXT
+);
