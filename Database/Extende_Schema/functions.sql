@@ -191,7 +191,7 @@ student_id not in(
     where average <10
 )
 and student_id not in(
-    select stu_id from get_List_of_students_AND_the_num_of_abcsence_from_the_module() where number_of_abscence>5;
+    select stu_id from get_List_of_students_AND_the_num_of_abcsence_from_the_module() where number_of_abscence>5
 )
 $$
 LANGUAGE sql;
