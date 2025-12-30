@@ -21,7 +21,13 @@ def get_all_students():
         Format: (student_id, last_name, first_name, dob, address, city, 
                  zip_code, phone, fax, email, group_id, section_id)
     """
-    pass
+    return [
+        ("1", "Reffas", "Chouaib", "2007-02-23", "1t, 02", "Annaba", "202235", "064862265", "Null", "mcy@gmail.com", 1, "A"),
+        ("2", "Amine", "Benkacem", "2006-05-15", "12 Av. Liberté", "Algiers", "16000", "0555123456", "021123456", "amine.b@gmail.com", 1, "A"),
+        ("3", "Sara", "Belkacem", "2007-11-02", "23 Rue El-Fadjr", "Oran", "31000", "0661234567", "031987654", "sara.belkacem@gmail.com", 2, "A"),
+        ("4", "Youssef", "Haddad", "2005-07-18", "45 Bd. Pasteur", "Constantine", "25000", "0559876543", "031123987", "youssef.h@gmail.com", 2, "B"),
+        ("5", "Leila", "Mansouri", "2006-01-09", "7 Impasse des Roses", "Annaba", "202200", "0669876543", "038123456", "leila.m@gmail.com", 3, "B"),
+    ]
 
 
 def add_student(last_name, first_name, dob, address, city, zip_code, phone, fax, email, group_id, section_id):
@@ -44,7 +50,7 @@ def add_student(last_name, first_name, dob, address, city, zip_code, phone, fax,
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_student(student_id, last_name, first_name, dob, address, city, zip_code, phone, fax, email, group_id, section_id):
@@ -58,7 +64,7 @@ def update_student(student_id, last_name, first_name, dob, address, city, zip_co
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_student(student_id):
@@ -71,7 +77,7 @@ def delete_student(student_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 
@@ -87,7 +93,13 @@ def get_all_instructors():
         Format: (instructor_id, department_id, last_name, first_name, 
                  rank, phone, fax, email)
     """
-    pass
+    return [
+        (1, 101, "BenAbbes", "Abbas", "PROF", "0661112233", "031112233", "abbas.b@univ.dz"),
+        (2, 101, "BenMokhtar", "Mokhtar", "MCA", "0662223344", "031223344", "mokhtar.b@univ.dz"),
+        (3, 102, "BenMohamed", "Djemaa", "MCB", "0663334455", "031334455", "djemaa.b@univ.dz"),
+        (4, 102, "Mohamed", "Lahlou", "PROF", "0664445566", "031445566", "lahlou.m@univ.dz"),
+        (5, 103, "Chad", "Abla", "Substitute", "0665556677", "031556677", "abla.c@univ.dz"),
+    ]
 
 
 def add_instructor(department_id, last_name, first_name, rank, phone, fax, email):
@@ -106,7 +118,7 @@ def add_instructor(department_id, last_name, first_name, rank, phone, fax, email
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_instructor(instructor_id, department_id, last_name, first_name, rank, phone, fax, email):
@@ -120,7 +132,7 @@ def update_instructor(instructor_id, department_id, last_name, first_name, rank,
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_instructor(instructor_id):
@@ -133,7 +145,7 @@ def delete_instructor(instructor_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 
@@ -148,7 +160,13 @@ def get_all_courses():
         list[tuple]: List of course records
         Format: (course_id, department_id, name, description)
     """
-    pass
+    return [
+        (1, 101, "Databases", "Introduction to Relational Databases"),
+        (2, 101, "Advanced Databases", "NoSQL and Big Data"),
+        (3, 101, "Software Engineering", "SDLC and Agile Methodologies"),
+        (4, 102, "Operating Systems", "Process Management and Memory"),
+        (5, 102, "Computer Networks", "TCP/IP and Routing"),
+    ]
 
 
 def add_course(course_id, department_id, name, description):
@@ -164,7 +182,7 @@ def add_course(course_id, department_id, name, description):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_course(course_id, department_id, name, description):
@@ -180,7 +198,7 @@ def update_course(course_id, department_id, name, description):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_course(course_id, department_id):
@@ -194,7 +212,7 @@ def delete_course(course_id, department_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 
@@ -209,7 +227,12 @@ def get_all_departments():
         list[tuple]: List of department records
         Format: (department_id, name)
     """
-    pass
+    return [
+        (101, "Computer Science"),
+        (102, "Information Technology"),
+        (103, "Software Engineering"),
+        (104, "Artificial Intelligence"),
+    ]
 
 
 def add_department(department_id, name):
@@ -223,7 +246,7 @@ def add_department(department_id, name):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_department(department_id, name):
@@ -237,7 +260,7 @@ def update_department(department_id, name):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_department(department_id):
@@ -250,7 +273,7 @@ def delete_department(department_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 
@@ -265,7 +288,13 @@ def get_all_rooms():
         list[tuple]: List of room records
         Format: (building, roomno, capacity)
     """
-    pass
+    return [
+        ("A", "101", 50),
+        ("A", "102", 40),
+        ("B", "201", 100),
+        ("B", "LAB1", 25),
+        ("C", "AUDITORIUM", 300),
+    ]
 
 
 def add_room(building, roomno, capacity):
@@ -280,7 +309,7 @@ def add_room(building, roomno, capacity):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_room(building, roomno, capacity):
@@ -295,7 +324,7 @@ def update_room(building, roomno, capacity):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_room(building, roomno):
@@ -309,7 +338,7 @@ def delete_room(building, roomno):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 
@@ -325,7 +354,11 @@ def get_all_reservations():
         Format: (reservation_id, building, roomno, course_id, department_id,
                  instructor_id, reserv_date, start_time, end_time, hours_number)
     """
-    pass
+    return [
+        (1, "A", "101", 1, 101, 1, "2025-10-01", "08:00:00", "10:00:00", 2),
+        (2, "B", "201", 2, 101, 2, "2025-10-01", "10:00:00", "12:00:00", 2),
+        (3, "C", "AUDITORIUM", 3, 102, 4, "2025-10-02", "14:00:00", "16:00:00", 2),
+    ]
 
 
 def add_reservation(building, roomno, course_id, department_id, instructor_id, 
@@ -347,7 +380,7 @@ def add_reservation(building, roomno, course_id, department_id, instructor_id,
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_reservation(reservation_id, building, roomno, course_id, department_id, 
@@ -362,7 +395,7 @@ def update_reservation(reservation_id, building, roomno, course_id, department_i
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_reservation(reservation_id):
@@ -375,7 +408,7 @@ def delete_reservation(reservation_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def check_room_availability(building, roomno, reserv_date, start_time, end_time):
@@ -392,8 +425,21 @@ def check_room_availability(building, roomno, reserv_date, start_time, end_time)
     Returns:
         bool: True if room is available, False if conflicted
     """
-    pass
+    return True
 
+def get_reservations_by_filter(room=None, date=None):
+    """
+    Retrieve reservations filtered by room and/or date
+    
+    Args:
+        room (str, optional): Room identifier ("Building RoomNo")
+        date (str, optional): Date string (YYYY-MM-DD)
+        
+    Returns:
+        list[tuple]: List of reservation records
+    """
+    # Mock filtering logic or just return all for checking
+    return get_all_reservations()
 
 
 #? ENROLLMENT OPERATIONS
@@ -407,7 +453,12 @@ def get_all_enrollments():
         list[tuple]: List of enrollment records
         Format: (student_id, course_id, department_id, enrollment_date)
     """
-    pass
+    return [
+        ("1", 1, 101, "2025-09-15"),
+        ("1", 2, 101, "2025-09-15"),
+        ("2", 1, 101, "2025-09-16"),
+        ("3", 4, 102, "2025-09-20"),
+    ]
 
 
 def add_enrollment(student_id, course_id, department_id, enrollment_date):
@@ -423,7 +474,7 @@ def add_enrollment(student_id, course_id, department_id, enrollment_date):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_enrollment(student_id, course_id, department_id, enrollment_date):
@@ -439,7 +490,7 @@ def update_enrollment(student_id, course_id, department_id, enrollment_date):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_enrollment(student_id, course_id, department_id):
@@ -454,7 +505,7 @@ def delete_enrollment(student_id, course_id, department_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 
@@ -469,7 +520,11 @@ def get_all_marks():
         list[tuple]: List of mark records
         Format: (mark_id, student_id, course_id, department_id, mark_value, mark_date)
     """
-    pass
+    return [
+        (1, "1", 1, 101, 15.5, "2025-11-20"),
+        (2, "1", 2, 101, 12.0, "2025-11-22"),
+        (3, "2", 1, 101, 18.0, "2025-11-20"),
+    ]
 
 
 def add_mark(student_id, course_id, department_id, mark_value, mark_date):
@@ -486,7 +541,7 @@ def add_mark(student_id, course_id, department_id, mark_value, mark_date):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_mark(mark_id, student_id, course_id, department_id, mark_value, mark_date):
@@ -500,7 +555,7 @@ def update_mark(mark_id, student_id, course_id, department_id, mark_value, mark_
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_mark(mark_id):
@@ -513,8 +568,33 @@ def delete_mark(mark_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
+def get_students_for_grade_entry(course_id):
+    """
+    Get students enrolled in a specific course for grading.
+    
+    Args:
+        course_id (int): The course ID.
+        
+    Returns:
+        list[tuple]: List of students (id, name, etc.)
+    """
+    return get_all_students()
+
+def save_bulk_marks(course_id, exam_id, marks_data):
+    """
+    Save multiple marks at once.
+    
+    Args:
+        course_id (int): Course ID
+        exam_id (int): Exam/Activity ID
+        marks_data (list): List of dicts/tuples with student_id and mark
+        
+    Returns:
+        bool: True if successful
+    """
+    return True
 
 
 #? ACTIVITY OPERATIONS
@@ -528,7 +608,11 @@ def get_all_activities():
         list[tuple]: List of activity records
         Format: (activity_id, activity_type, reservation_id, course_id, department_id)
     """
-    pass
+    return [
+        (1, "Lecture", 1, 1, 101),
+        (2, "Tutorial", 2, 1, 101),
+        (3, "Lab", 3, 2, 101),
+    ]
 
 
 def add_activity(activity_id, activity_type, reservation_id, course_id, department_id):
@@ -545,7 +629,7 @@ def add_activity(activity_id, activity_type, reservation_id, course_id, departme
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_activity(activity_id, activity_type, reservation_id, course_id, department_id):
@@ -559,7 +643,7 @@ def update_activity(activity_id, activity_type, reservation_id, course_id, depar
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_activity(activity_id):
@@ -572,7 +656,7 @@ def delete_activity(activity_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 
@@ -587,7 +671,11 @@ def get_all_exams():
         list[tuple]: List of exam records
         Format: (exam_id, duration, exam_type, course_id, department_id)
     """
-    pass
+    return [
+        (1, 120, "Midterm", 1, 101),
+        (2, 180, "Final", 1, 101),
+        (3, 60, "Quiz", 2, 101),
+    ]
 
 
 def add_exam(exam_id, duration, exam_type, course_id, department_id):
@@ -604,7 +692,7 @@ def add_exam(exam_id, duration, exam_type, course_id, department_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_exam(exam_id, duration, exam_type, course_id, department_id):
@@ -618,7 +706,7 @@ def update_exam(exam_id, duration, exam_type, course_id, department_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_exam(exam_id):
@@ -631,7 +719,7 @@ def delete_exam(exam_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 
@@ -646,7 +734,11 @@ def get_all_attendance():
         list[tuple]: List of attendance records
         Format: (student_id, activity_id, attendance_date, status)
     """
-    pass
+    return [
+        ("1", 1, "2025-10-01", "Present"),
+        ("2", 1, "2025-10-01", "Absent"),
+        ("3", 1, "2025-10-01", "Present"),
+    ]
 
 
 def add_attendance(student_id, activity_id, attendance_date, status):
@@ -662,7 +754,7 @@ def add_attendance(student_id, activity_id, attendance_date, status):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def update_attendance(student_id, activity_id, attendance_date, status):
@@ -678,7 +770,7 @@ def update_attendance(student_id, activity_id, attendance_date, status):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def delete_attendance(student_id, activity_id, attendance_date):
@@ -693,8 +785,33 @@ def delete_attendance(student_id, activity_id, attendance_date):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
+def get_students_by_section_group(section, group):
+    """
+    Get students filtered by section and group.
+    
+    Args:
+        section (str): Section ID
+        group (str): Group ID
+        
+    Returns:
+        list[tuple]: List of matching students
+    """
+    return get_all_students()
+
+def save_bulk_attendance(activity_id, attendance_data):
+    """
+    Save multiple attendance records at once.
+    
+    Args:
+        activity_id (int): Activity ID
+        attendance_data (list): List of (student_id, status)
+        
+    Returns:
+        bool: True if successful
+    """
+    return True
 
 
 #? INSTRUCTOR-COURSE ASSIGNMENT OPERATIONS
@@ -710,7 +827,10 @@ def get_all_instructor_course_assignments():
         list[tuple]: List of assignment records
         Format: (instructor_id, course_id, department_id, assignment_date)
     """
-    pass
+    return [
+        (1, 1, 101, "2025-09-01"),
+        (2, 2, 101, "2025-09-01"),
+    ]
 
 
 def assign_instructor_to_course(instructor_id, course_id, department_id, assignment_date):
@@ -726,7 +846,7 @@ def assign_instructor_to_course(instructor_id, course_id, department_id, assignm
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def remove_instructor_from_course(instructor_id, course_id, department_id):
@@ -741,7 +861,7 @@ def remove_instructor_from_course(instructor_id, course_id, department_id):
     Returns:
         bool: True if successful, False otherwise
     """
-    pass
+    return True
 
 
 def get_instructor_full_name_list():
@@ -752,7 +872,12 @@ def get_instructor_full_name_list():
         list[str]: List of formatted instructor names
         Format: ["Dr. FirstName LastName", ...]
     """
-    pass
+    return [
+        "Dr. Abbas BenAbbes",
+        "Dr. Mokhtar BenMokhtar",
+        "Dr. Djemaa Ben Mohamed",
+        "Prof. Lahlou Mohamed",
+    ]
 
 
 def get_course_name_list():
@@ -762,4 +887,124 @@ def get_course_name_list():
     Returns:
         list[str]: List of course names
     """
-    pass
+    return [
+        "Databases",
+        "Advanced Databases",
+        "Software Engineering",
+        "Operating Systems",
+    ]
+
+
+#? QUERY OPERATIONS
+
+def get_available_queries():
+    """
+    Retrieve list of available pre-defined queries.
+    
+    Returns:
+        list[str]: List of query names/descriptions
+    """
+    return [
+        "Students with average grade > 15",
+        "Courses with no enrolled students",
+        "Instructors teaching > 3 courses",
+        "Rooms fully booked today",
+    ]
+
+def execute_query(query_name):
+    """
+    Execute a specific named query.
+    
+    Args:
+        query_name (str): The name/ID of the query to execute
+        
+    Returns:
+        tuple: (headers, data) where headers is list of strings, data is list of rows
+    """
+    if "average grade" in query_name:
+        headers = ["Student ID", "First Name", "Last Name", "Average"]
+        data = [
+            ("3", "Sara", "Belkacem", 16.5),
+            ("4", "Youssef", "Haddad", 15.2),
+        ]
+        return headers, data
+    else:
+        headers = ["Result"]
+        data = [("Mock Result 1",), ("Mock Result 2",)]
+        return headers, data
+
+
+#? AUDIT OPERATIONS
+
+def get_audit_logs(from_date, to_date, table_name):
+    """
+    Retrieve audit logs filtered by date range and table.
+    
+    Args:
+        from_date (str): Start date
+        to_date (str): End date
+        table_name (str): Table name filter
+        
+    Returns:
+        list[tuple]: List of log records
+    """
+    return [
+        ("2025-12-28 10:00", "admin", "INSERT", "Students", "Added Student 100"),
+        ("2025-12-28 11:30", "admin", "UPDATE", "Marks", "Changed mark for Student 1"),
+        ("2025-12-29 09:15", "user", "DELETE", "Reservations", "Removed Reservation 5"),
+    ]
+
+def get_table_names():
+    """
+    Retrieve list of database table names.
+    
+    Returns:
+        list[str]: List of tables
+    """
+    return ["Students", "Instructors", "Courses", "Marks", "Attendance", "Reservations"]
+
+
+#? RESULTS OPERATIONS
+
+def get_student_results(semester, course_id):
+    """
+    Retrieve results for a specific semester and course.
+    
+    Args:
+        semester (str): Semester ID/Name
+        course_id (int): Course ID
+        
+    Returns:
+        list[tuple]: List of student results
+    """
+    return [
+        ("1", "Reffas Chouaib", 15.5, "Pass"),
+        ("2", "Amine Benkacem", 12.0, "Pass"),
+        ("3", "Sara Belkacem", 18.0, "Distinction"),
+    ]
+
+def get_semesters_list():
+    """
+    Retrieve list of semesters.
+    
+    Returns:
+        list[str]: List of semesters
+    """
+    return ["S1 2025/2026", "S2 2025/2026", "S1 2024/2025"]
+
+
+#? PERFORMANCE OPERATIONS
+
+def get_performance_stats():
+    """
+    Retrieve general performance statistics.
+    
+    Returns:
+        dict: Dictionary of statistics
+    """
+    return {
+        "Total Students": 1500,
+        "Average GPA": 12.5,
+        "Attendance Rate": "85%",
+        "Pass Rate": "92%",
+    }
