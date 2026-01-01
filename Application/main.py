@@ -6,6 +6,13 @@
     Starts the event loop
 """
 
+import sys
+import os
+
+#* Add the project root to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+
 
 #& imports
 
@@ -24,7 +31,7 @@ logger = logging.getLogger(__name__)
 logger.info("Application started")
 
 def _set_app_window_style(App:object):
-    App.setStyle("windows11")
+    App.setStyle("Fusion")
 
 def start():
     
