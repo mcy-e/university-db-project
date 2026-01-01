@@ -864,36 +864,37 @@ def remove_instructor_from_course(instructor_id, course_id, department_id):
     return True
 
 
-def get_instructor_full_name_list():
+def get_instructor_list_with_ids():
     """
-    Retrieve list of instructor full names for display
+    Retrieve list of instructors with their IDs for assignment
     
     Returns:
-        list[str]: List of formatted instructor names
-        Format: ["Dr. FirstName LastName", ...]
+        list[tuple]: List of (instructor_id, full_name, department_id)
+        Format: [(1, "Dr. Abbas BenAbbes", 101), ...]
     """
-    return [
-        "Dr. Abbas BenAbbes",
-        "Dr. Mokhtar BenMokhtar",
-        "Dr. Djemaa Ben Mohamed",
-        "Prof. Lahlou Mohamed",
-    ]
+    instructors = get_all_instructors()
+    result = []
+    for instructor in instructors:
+        instructor_id, dept_id, last_name, first_name, rank, phone, fax, email = instructor
+        full_name = f"Dr. {first_name} {last_name}"
+        result.append((instructor_id, full_name, dept_id))
+    return result
 
 
-def get_course_name_list():
+def get_course_list_with_ids():
     """
-    Retrieve list of course names for display
+    Retrieve list of courses with their IDs for assignment
     
     Returns:
-        list[str]: List of course names
+        list[tuple]: List of (course_id, course_name, department_id)
+        Format: [(1, "Databases", 101), ...]
     """
-    return [
-        "Databases",
-        "Advanced Databases",
-        "Software Engineering",
-        "Operating Systems",
-    ]
-
+    courses = get_all_courses()
+    result = []
+    for course in courses:
+        course_id, dept_id, name, desc = course
+        result.append((course_id, name, dept_id))
+    return result
 
 #? QUERY OPERATIONS
 
