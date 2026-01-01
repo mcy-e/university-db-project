@@ -825,11 +825,11 @@ def get_all_instructor_course_assignments():
     
     Returns:
         list[tuple]: List of assignment records
-        Format: (instructor_id, course_id, department_id, assignment_date)
+        Format: (instructor_id,instructor_name, course_id,course_name, department_id, assignment_date)
     """
     return [
-        (1, 1, 101, "2025-09-01"),
-        (2, 2, 101, "2025-09-01"),
+        (1,"Dr. Abbas BenAbbes", 1, "Databases", 101, "2025-09-01"),
+        (2,"Dr. Mokhtar BenMokhtar", 2,"Advanced Databases", 101, "2025-09-01"),
     ]
 
 
