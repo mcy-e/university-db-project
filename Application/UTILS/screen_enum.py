@@ -16,30 +16,25 @@ class Screens(IntEnum):
     RESERVATION_CRUD = 7
     ENROLLMENT_CRUD = 8
     MARK_CRUD = 9
-    SECTION_CRUD = 10
-    GROUP_CRUD = 11
-    ACTIVITY_CRUD = 12
-    EXAM_CRUD = 13
-    ATTENDANCE_CRUD = 14
+    ACTIVITY_CRUD = 10
+    EXAM_CRUD = 11
+    ATTENDANCE_CRUD = 12
     
     #* Academic Menu & 2 Screens
-    ACADEMIC_MENU = 15
-    ASSIGN_INSTRUCTOR = 16
-    MANAGE_RESERVATIONS = 17
+    ACADEMIC_MENU = 13
+    ASSIGN_INSTRUCTOR = 14
+    MANAGE_RESERVATIONS = 15
     
     #* Performance Menu & 2 Screens
-    PERFORMANCE_MENU = 18
-    MARKS_ENTRY = 19
-    ATTENDANCE_ENTRY = 20
+    PERFORMANCE_MENU = 16
+    MARKS_ENTRY = 17
+    ATTENDANCE_ENTRY = 18
     
-    #* Results Menu & 1 Screen
-    RESULTS_MENU = 21
-    RESULTS_VIEWER = 22
+    #* Results Viewer
+    RESULTS_VIEWER = 19
     
-    #* Queries Menu & 1 Screen
-    QUERIES_MENU = 23
-    QUERY_VIEWER = 24
+    #* Queries Viewer
+    QUERY_VIEWER = 20
     
-    #* Audit Menu & 1 Screen
-    AUDIT_MENU = 25
-    AUDIT_VIEWER = 26
+    #* Audit Viewer
+    AUDIT_VIEWER = 21
