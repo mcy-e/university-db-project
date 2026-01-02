@@ -58,7 +58,7 @@
        <item>
         <widget class="QPushButton" name="creat_reservation">
          <property name="text">
-          <string>CREATE RESERVATION</string>
+          <string>REFRESH TABLE</string>
          </property>
         </widget>
        </item>
@@ -141,10 +141,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="creation_lyout" stretch="0,0,0,0,0">
-         <property name="spacing">
-          <number>10</number>
-         </property>
+        <layout class="QGridLayout" name="creation_layout">
          <property name="leftMargin">
           <number>10</number>
          </property>
@@ -157,7 +154,55 @@
          <property name="bottomMargin">
           <number>10</number>
          </property>
-         <item>
+         <property name="horizontalSpacing">
+          <number>10</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>10</number>
+         </property>
+         <item row="0" column="0">
+          <layout class="QFormLayout" name="room_layout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="room_label">
+             <property name="text">
+              <string>Room:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="room_selection"/>
+           </item>
+          </layout>
+         </item>
+         <item row="0" column="1">
+          <layout class="QFormLayout" name="course_layout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="course_label">
+             <property name="text">
+              <string>Course:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="course_selection"/>
+           </item>
+          </layout>
+         </item>
+         <item row="0" column="2">
+          <layout class="QFormLayout" name="instructor_layout">
+           <item row="0" column="0">
+            <widget class="QLabel" name="instructor_label">
+             <property name="text">
+              <string>Instructor:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="instructor_selection"/>
+           </item>
+          </layout>
+         </item>
+         <item row="1" column="0">
           <layout class="QFormLayout" name="purpose_layout">
            <item row="0" column="0">
             <widget class="QLabel" name="purpose_label">
@@ -171,10 +216,10 @@
            </item>
           </layout>
          </item>
-         <item>
+         <item row="1" column="1">
           <layout class="QFormLayout" name="date_layout">
            <item row="0" column="0">
-            <widget class="QLabel" name="date_label_2">
+            <widget class="QLabel" name="date_label">
              <property name="text">
               <string>Date:</string>
              </property>
@@ -196,45 +241,35 @@
            </item>
           </layout>
          </item>
-         <item>
-          <layout class="QFormLayout" name="start_layout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="start_label">
-             <property name="text">
-              <string>Start:</string>
-             </property>
-            </widget>
+         <item row="1" column="2">
+          <layout class="QHBoxLayout" name="time_layout">
+           <item>
+            <layout class="QFormLayout" name="start_layout">
+             <item row="0" column="0">
+              <widget class="QLabel" name="start_label">
+               <property name="text">
+                <string>Start:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QTimeEdit" name="start_edit"/>
+             </item>
+            </layout>
            </item>
-           <item row="0" column="1">
-            <widget class="QTimeEdit" name="start_edit"/>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QFormLayout" name="end_layout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="end_label">
-             <property name="text">
-              <string>End:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QTimeEdit" name="end_edit"/>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QFormLayout" name="room_layout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="room_label_2">
-             <property name="text">
-              <string>Room:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QComboBox" name="room_selection"/>
+           <item>
+            <layout class="QFormLayout" name="end_layout">
+             <item row="0" column="0">
+              <widget class="QLabel" name="end_label">
+               <property name="text">
+                <string>End:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QTimeEdit" name="end_edit"/>
+             </item>
+            </layout>
            </item>
           </layout>
          </item>
