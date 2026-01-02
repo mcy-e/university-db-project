@@ -27,6 +27,10 @@ class InstructorCRUD(BaseCRUD):
         self.populate_table(DATA)
         self.back_btn.clicked.connect(self.go_back.emit)
 
+
+    def _is_id_field(self, header):
+        return header == "Instructor_ID"
+
     #* Override to add dropdown for Rank
     def _build_form(self):
 

@@ -9,6 +9,8 @@ from PyQt6.QtWidgets import (
 
 from Database import database as db
 
+from UTILS import constriants
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -87,9 +89,15 @@ class BaseCRUD(QWidget):
 
         for row, header in enumerate(self.headers):
             
-            #* Create labels with there line dit object
+            #* Create labels with there line edit object
             label = QLabel(header)
             line_edit = QLineEdit()
+            
+            #* Make ID fields read-only and visually distinct
+            if self._is_id_field(header):
+                line_edit.setReadOnly(True)
+                line_edit.setStyleSheet("QLineEdit { background-color: #f0f0f0; color: #666; }")
+                line_edit.setPlaceholderText("Auto-generated")
 
             #* Add them to the layout 
             layout.addWidget(label, row, 0)
@@ -104,19 +112,26 @@ class BaseCRUD(QWidget):
         self.scrollArea.setWidget(container)
         self.scrollArea.setWidgetResizable(True)
         for i, line_edit in enumerate(self.input_list):
-            line_edit.returnPressed.connect(
-                lambda le=line_edit, idx=i: self._focus_next(idx)
-            )
-        logger.debug(f"Form input created for field: {header}")
-
+            if not line_edit.isReadOnly(): 
+                line_edit.returnPressed.connect(
+                    lambda le=line_edit, idx=i: self._focus_next(idx)
+                )
+        logger.debug(f"Form input created for fields")
 
     def _focus_next(self, idx):
 
-        #* Move focus to next input field  loop back to first when the end is reached
+        #* Move focus to next editable input field, loop back to first when the end is reached
         next_idx = (idx + 1) % len(self.input_list)
-        self.input_list[next_idx].setFocus()
-
-
+        
+        #* Skip read-only fields
+        attempts = 0
+        while self.input_list[next_idx].isReadOnly() and attempts < len(self.input_list):
+            next_idx = (next_idx + 1) % len(self.input_list)
+            attempts += 1
+        
+        if not self.input_list[next_idx].isReadOnly():
+            self.input_list[next_idx].setFocus()
+   
     #* Connect signals
     def _connect_signals(self):
         self.table.itemSelectionChanged.connect(self._load_selected_row)
@@ -217,20 +232,27 @@ class BaseCRUD(QWidget):
 
         logger.debug("Form cleared and selection reset")
 
-
     def _save_new(self):
 
         logger.info("Save requested for new row")
 
         row_data = []
+        field_dict = {}
 
-        #* Determine starting index (skip ID if auto-increment)
-        start_idx = 1 if self._should_skip_first_field() else 0
+        #* Collect only non-ID field values for insertion AND build validation dict
+        for line_input, header in zip(self.input_list, self.headers):
+            if not self._is_id_field(header):
+                value = self._get_input_value(line_input)
+                row_data.append(value)
+                field_dict[header] = value
 
-        #* Fill the row with data from inputs (skip first field if needed)
-        for col_idx in range(start_idx, len(self.input_list)):
-            value = self._get_input_value(self.input_list[col_idx])
-            row_data.append(value)
+        #* VALIDATE BEFORE SAVING
+        is_valid, errors = constriants.validate_all_fields(field_dict)
+        if not is_valid:
+            error_msg = "\n".join(errors)
+            logger.error(f"Validation failed: {error_msg}")
+            # TODO: Show QMessageBox to user
+            return
 
         #* Call database insert function
         try:
@@ -239,42 +261,51 @@ class BaseCRUD(QWidget):
                 logger.error("Database insert failed")
                 return
             
-            #* If result is tuple (success, new_id), use the new_id
+            #* If result is tuple (success, new_id), extract the new ID
             if isinstance(result, tuple) and result[0]:
                 new_id = result[1]
             else:
-                new_id = self._get_input_value(self.input_list[0]) if not self._should_skip_first_field() else "N/A"
+                #* Placeholder if DB doesn't return ID
+                new_id = "Auto"  
                 
         except Exception as e:
             logger.error(f"Error saving new row: {e}")
             return
 
-        #* Insert into table UI with actual ID
+        #* Insert into table UI with all fields including IDs
         row_idx = self.table.rowCount()
         self.table.insertRow(row_idx)
         
-        #* Add ID to first column
-        self.table.setItem(row_idx, 0, QTableWidgetItem(str(new_id)))
+        #* Build complete row data with IDs
+        full_row_data = []
+        data_idx = 0
+        for header in self.headers:
+            if self._is_id_field(header):
+                full_row_data.append(str(new_id))
+            else:
+                full_row_data.append(str(row_data[data_idx]))
+                data_idx += 1
         
-        #* Add the rest of the data
-        for col_idx, value in enumerate(row_data, start=1):
+        #* Add all data to table
+        for col_idx, value in enumerate(full_row_data):
             item = QTableWidgetItem(str(value))
             self.table.setItem(row_idx, col_idx, item)
 
         #* Clear the form for next entry
         for line_input in self.input_list:
-            self._set_input_value(line_input, "")
+            if not line_input.isReadOnly():
+                self._set_input_value(line_input, "")
 
         #* Enable the table and buttons
         self._clear_form()
         self.table.setEnabled(True)
         self._enable_buttons()
 
-        logger.info(f"New row inserted at index {row_idx}")
+        logger.info(f"New row inserted at index {row_idx} with ID {new_id}")
         logger.debug(f"Inserted row data: {row_data}")
 
+
     def _update_row(self):
-        
         
         row = self.table.currentRow()
         logger.info(f"Update requested for row {row}")
@@ -282,26 +313,39 @@ class BaseCRUD(QWidget):
         if row < 0:
             return
 
-        #* Validate value (place holder) 
+        #* Collect ALL field values (including IDs for update) AND validate
         updated_data = []
+        field_dict = {}
 
-        for col_idx, line_input in enumerate(self.input_list):
+        for line_input, header in zip(self.input_list, self.headers):
             value = self._get_input_value(line_input).strip()
             updated_data.append(value)
+            
+            #* Add non-ID fields to validation dict
+            if not self._is_id_field(header):
+                field_dict[header] = value
 
+        #* VALIDATE BEFORE UPDATING
+        is_valid, errors = constriants.validate_all_fields(field_dict)
+        if not is_valid:
+            error_msg = "\n".join(errors)
+            logger.error(f"Validation failed: {error_msg}")
+            # TODO: Show QMessageBox to user
+            return
 
-
-        #* Call insert to db function to update insert
+        #* Call database update function
         try:
             success = self.db_operations['update'](*updated_data)
             if not success:
                 logger.error("Database update failed")
-            else:
-                for col_idx, line_input in enumerate(updated_data):
-                    self.table.setItem(row, col_idx, QTableWidgetItem(value))
+                return
             
-                logger.info(f"Row {row} updated successfully")
-                logger.debug(f"Updated row data: {updated_data}")
+            #* Update was successful, now update the table UI
+            for col_idx, value in enumerate(updated_data):
+                self.table.setItem(row, col_idx, QTableWidgetItem(value))
+            
+            logger.info(f"Row {row} updated successfully")
+            logger.debug(f"Updated row data: {updated_data}")
 
         except Exception as e:
             logger.error(f"Error updating row: {e}")
@@ -364,15 +408,9 @@ class BaseCRUD(QWidget):
         
         logger.info(f"Search complete, {len(filtered_rows)} rows match '{search_text}'")
 
-    def _skip_first_field(self):
-        """
-        Check if first field should be skipped (for auto-increment IDs)
-        Override in child classes if needed
-        """
-        return False
-
-
-        
+    def _is_id_field(self, header):
+       #* Check if a header represents is an ID
+        return header.endswith('_ID') or header == 'ID' or 'ID' in header.split('_') or 'ID' in header.strip()
 
         
 

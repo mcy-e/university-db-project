@@ -23,7 +23,9 @@ class CourseCRUD(BaseCRUD):
         }
         header=["Course_ID", "Department_ID", "Name", "Description"]
         super().__init__(header,db_operations)
-        
+    
         self.populate_table(DATA)
         self.back_btn.clicked.connect(self.go_back.emit)
 
+    def _is_id_field(self, header):
+        return header == "Course_ID"
