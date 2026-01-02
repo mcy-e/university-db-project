@@ -7,6 +7,8 @@ from PyQt6.QtWidgets import (
     QGridLayout, QTableWidgetItem
 )
 
+from Database import database as db
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,17 +17,20 @@ logger = logging.getLogger(__name__)
 #* Path to ui file for the crud
 PATH_TO_UI = "Application/GUI/UI/CRUD.ui"
 
+# TODO : Change the way of getting all data and make it dynamic in the base class
 
 class BaseCRUD(QWidget):
-    def __init__(self, headers):
+    def __init__(self, headers:list, db_operations:dict):
         super().__init__()
         uic.loadUi(PATH_TO_UI, self)
 
         self.headers = headers
-
         logger.debug(f"BaseCRUD initialized with headers: {self.headers}")
 
+
+        self.all_rows_data = []  
         self.inputs = {} 
+        self.db_operations = db_operations
 
         self._setup_table()
         self._build_form()
@@ -54,6 +59,19 @@ class BaseCRUD(QWidget):
 
         logger.info(f"Table initialized with {len(self.headers)} columns" )
 
+    #* Helper to get the input wether from combo box or edit line
+    def _get_input_value(self, input_widget):
+        if hasattr(input_widget, 'currentText'):  
+            return input_widget.currentText()
+        else:  
+            return input_widget.text()
+
+    #* Helper to set the input wether from combo box or edit line
+    def _set_input_value(self, input_widget, value):
+        if hasattr(input_widget, 'setCurrentText'):  
+            input_widget.setCurrentText(value)
+        else:  
+            input_widget.setText(value)
 
 
     def _build_form(self):
@@ -107,6 +125,7 @@ class BaseCRUD(QWidget):
         self.save_btn.clicked.connect(self._save_new)
         self.update_btn.clicked.connect(self._update_row)
         self.delete_btn.clicked.connect(self._delete_row)
+        self.search_box.textChanged.connect(self._search_table)
 
     #* Load the Selected rows in the bottom
     def _load_selected_row(self):
@@ -118,7 +137,7 @@ class BaseCRUD(QWidget):
 
         for col, header in enumerate(self.headers):
             item = self.table.item(row, col)
-            self.inputs[header].setText(item.text() if item else "")
+            self._set_input_value(self.inputs[header], item.text() if item else "")
 
             self.save_btn.setEnabled(False)
             self.update_btn.setEnabled(True)
@@ -130,6 +149,9 @@ class BaseCRUD(QWidget):
     #* Insert the values to the table from the existing db
     def populate_table(self, rows:list[tuple]):
         
+        #* Store all rows for searching
+        self.all_rows_data = rows.copy()
+        
         #* Clear rows
         self.table.setRowCount(0)  
         
@@ -140,6 +162,8 @@ class BaseCRUD(QWidget):
             for col_idx, value in enumerate(row_data):
                 item = QTableWidgetItem(str(value))
                 self.table.setItem(row_idx, col_idx, item)
+        
+        logger.info(f"Table of {__class__.__name__} got populated with {self.table.rowCount()}")
 
     def _disable_buttons(self):
         
@@ -166,7 +190,7 @@ class BaseCRUD(QWidget):
         self.table.setEnabled(False)
 
         for header in self.headers:
-            self.inputs[header].clear()
+            self._set_input_value(self.inputs[header], "")
 
         #* Enable editing buttons
         self.save_btn.setEnabled(True)
@@ -185,7 +209,7 @@ class BaseCRUD(QWidget):
         self.table.setCurrentCell(-1, -1)
 
         for header in self.headers:
-            self.inputs[header].clear()
+            self._set_input_value(self.inputs[header], "")
 
         self.table.blockSignals(False)
 
@@ -198,26 +222,48 @@ class BaseCRUD(QWidget):
 
         logger.info("Save requested for new row")
 
-        #* Insert a new empty row at the end
+        row_data = []
+
+        #* Determine starting index (skip ID if auto-increment)
+        start_idx = 1 if self._should_skip_first_field() else 0
+
+        #* Fill the row with data from inputs (skip first field if needed)
+        for col_idx in range(start_idx, len(self.input_list)):
+            value = self._get_input_value(self.input_list[col_idx])
+            row_data.append(value)
+
+        #* Call database insert function
+        try:
+            result = self.db_operations['add'](*row_data)
+            if not result:
+                logger.error("Database insert failed")
+                return
+            
+            #* If result is tuple (success, new_id), use the new_id
+            if isinstance(result, tuple) and result[0]:
+                new_id = result[1]
+            else:
+                new_id = self._get_input_value(self.input_list[0]) if not self._should_skip_first_field() else "N/A"
+                
+        except Exception as e:
+            logger.error(f"Error saving new row: {e}")
+            return
+
+        #* Insert into table UI with actual ID
         row_idx = self.table.rowCount()
         self.table.insertRow(row_idx)
-
-        row_data=[]
-
-        #* Fill the row with data from inputs
-        for col_idx, line_input in enumerate(self.input_list):
-            value = line_input.text()
-
-            row_data.append(value)
-            #* Validate value (place holder) 
-            item = QTableWidgetItem(value)
+        
+        #* Add ID to first column
+        self.table.setItem(row_idx, 0, QTableWidgetItem(str(new_id)))
+        
+        #* Add the rest of the data
+        for col_idx, value in enumerate(row_data, start=1):
+            item = QTableWidgetItem(str(value))
             self.table.setItem(row_idx, col_idx, item)
-
-        #* Call insert to db function
 
         #* Clear the form for next entry
         for line_input in self.input_list:
-            line_input.setText("")
+            self._set_input_value(line_input, "")
 
         #* Enable the table and buttons
         self._clear_form()
@@ -225,8 +271,7 @@ class BaseCRUD(QWidget):
         self._enable_buttons()
 
         logger.info(f"New row inserted at index {row_idx}")
-        logger.debug(f"Inserted row data: {row_data}", )
-
+        logger.debug(f"Inserted row data: {row_data}")
 
     def _update_row(self):
         
@@ -241,15 +286,25 @@ class BaseCRUD(QWidget):
         updated_data = []
 
         for col_idx, line_input in enumerate(self.input_list):
-            value = line_input.text().strip()
+            value = self._get_input_value(line_input).strip()
             updated_data.append(value)
 
-            self.table.setItem(row, col_idx, QTableWidgetItem(value))
-        
-        logger.info(f"Row {row} updated successfully")
-        logger.debug(f"Updated row data: {updated_data}")
+
 
         #* Call insert to db function to update insert
+        try:
+            success = self.db_operations['update'](*updated_data)
+            if not success:
+                logger.error("Database update failed")
+            else:
+                for col_idx, line_input in enumerate(updated_data):
+                    self.table.setItem(row, col_idx, QTableWidgetItem(value))
+            
+                logger.info(f"Row {row} updated successfully")
+                logger.debug(f"Updated row data: {updated_data}")
+
+        except Exception as e:
+            logger.error(f"Error updating row: {e}")
 
     def _delete_row(self):
 
@@ -257,13 +312,65 @@ class BaseCRUD(QWidget):
         if row < 0:
             return
 
+        #* Get the ID from first column for deletion
+        id_value = self.table.item(row, 0).text()
+
+        #* Call database delete function
+        try:
+            success = self.db_operations['delete'](id_value)
+            if not success:
+                logger.error("Database delete failed")
+                return 
+        except Exception as e:
+            logger.error(f"Error deleting row: {e}")
+            return
         self.table.removeRow(row)
-
         logger.warning(f"Row {row} deleted by user action")
-
-        #* Call insert to db function to update insert
-
         self._clear_form()
+
+
+    def _search_table(self):
+        
+        search_text = self.search_box.text().strip().lower()
+        
+        logger.info(f"Search initiated with query: '{search_text}'")
+        
+        if not search_text:
+            
+            #* Show all data for empty search
+            self.populate_table(self.all_rows_data)
+            logger.debug("Search cleared....,showing all rows")
+            return
+        
+        #* Filter rows that match the text box
+        filtered_rows = []
+        for row_data in self.all_rows_data:
+            #* Check if the text exists in any column of this row
+            if any(search_text in str(value).lower() for value in row_data):
+                filtered_rows.append(row_data)
+        
+        #* Clear table and populate with filtered results
+        self.table.setRowCount(0)
+
+        for row_idx, row_data in enumerate(filtered_rows):
+        
+            self.table.insertRow(row_idx)
+        
+            for col_idx, value in enumerate(row_data):
+        
+                item = QTableWidgetItem(str(value))
+        
+                self.table.setItem(row_idx, col_idx, item)
+        
+        logger.info(f"Search complete, {len(filtered_rows)} rows match '{search_text}'")
+
+    def _skip_first_field(self):
+        """
+        Check if first field should be skipped (for auto-increment IDs)
+        Override in child classes if needed
+        """
+        return False
+
 
         
 
