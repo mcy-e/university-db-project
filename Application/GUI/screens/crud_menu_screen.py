@@ -18,8 +18,6 @@ class CRUDMenuScreen(QWidget):
     navigate_to_reservation_crud = pyqtSignal()
     navigate_to_enrollment_crud = pyqtSignal()
     navigate_to_mark_crud = pyqtSignal()
-    navigate_to_section_crud = pyqtSignal()
-    navigate_to_group_crud = pyqtSignal()
     navigate_to_activity_crud = pyqtSignal()
     navigate_to_exam_crud = pyqtSignal()
     navigate_to_attendance_crud = pyqtSignal()
@@ -121,8 +119,6 @@ class CRUDMenuButtons(QWidget):
                 ("Reservation CRUD", self.parent_screen.navigate_to_reservation_crud),
                 ("Enrollment CRUD", self.parent_screen.navigate_to_enrollment_crud),
                 ("Mark CRUD", self.parent_screen.navigate_to_mark_crud),
-                ("Section CRUD", self.parent_screen.navigate_to_section_crud),
-                ("Group CRUD", self.parent_screen.navigate_to_group_crud),
                 ("Activity CRUD", self.parent_screen.navigate_to_activity_crud),
                 ("Exam CRUD", self.parent_screen.navigate_to_exam_crud),
                 ("Attendance CRUD", self.parent_screen.navigate_to_attendance_crud),
