@@ -896,6 +896,59 @@ def get_course_list_with_ids():
         result.append((course_id, name, dept_id))
     return result
 
+#? RESERVATION MANAGEMENT OPERATIONS
+def get_courses_for_reservation():
+    """
+    Get list of courses formatted for reservation dropdowns
+    
+    Returns:
+        list[tuple]: List of (course_id, display_name, department_id)
+    """
+    courses = get_all_courses()
+    result = []
+    for course_id, dept_id, name, desc in courses:
+        display = f"{name} (Dept {dept_id})"
+        result.append((course_id, display, dept_id))
+    return result
+
+
+def get_instructors_for_reservation():
+    """
+    Get list of instructors formatted for reservation dropdowns
+    
+    Returns:
+        list[tuple]: List of (instructor_id, display_name, department_id)
+    """
+    instructors = get_all_instructors()
+    result = []
+    for inst_id, dept_id, last_name, first_name, rank, phone, fax, email in instructors:
+        display = f"{rank} {first_name} {last_name}"
+        result.append((inst_id, display, dept_id))
+    return result
+
+
+def get_reservation_details(reservation_id):
+    """
+    Get detailed information about a specific reservation including names
+    
+    Args:
+        reservation_id (int): Reservation ID
+        
+    Returns:
+        dict: Dictionary with all reservation details including course and instructor names
+    """
+    # TODO: Implement when actual database is connected
+    # This would join with courses and instructors tables
+    return {
+        "reservation_id": reservation_id,
+        "room": "A 101",
+        "course_name": "Databases",
+        "instructor_name": "Dr. Abbas",
+        "date": "2025-10-01",
+        "start_time": "08:00:00",
+        "end_time": "10:00:00",
+        "hours": 2
+    }
 #? QUERY OPERATIONS
 
 def get_available_queries():
