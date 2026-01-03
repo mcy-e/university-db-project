@@ -30,6 +30,54 @@ def get_all_students():
     ]
 
 
+def get_students_by_filters(section_id=None, group_id=None):
+    """
+    Retrieve students filtered by section and/or group
+    
+    Args:
+        section_id (str, optional): Section ID to filter by
+        group_id (int, optional): Group ID to filter by
+    
+    Returns:
+        list[tuple]: List of student records
+        Format: (student_id, last_name, first_name, group_id, section_id)
+    """
+    all_students = get_all_students()
+    filtered = []
+    
+    for student in all_students:
+        student_id, last_name, first_name, dob, address, city, zip_code, phone, fax, email, group, section = student
+        
+        if section_id and section != section_id:
+            continue
+        if group_id and group != group_id:
+            continue
+        
+        filtered.append((student_id, last_name, first_name, group, section))
+    
+    return filtered
+
+
+def get_students_with_marks(course_id, exam_id):
+    """
+    Retrieve students enrolled in a course with their marks for a specific exam
+    
+    Args:
+        course_id (int): Course ID
+        exam_id (int): Exam ID
+    
+    Returns:
+        list[tuple]: List of student records with marks
+        Format: (student_id, last_name, first_name, current_mark)
+    """
+    return [
+        ("1", "Reffas", "Chouaib", 15.5),
+        ("2", "Amine", "Benkacem", 12.0),
+        ("3", "Sara", "Belkacem", None),
+        ("4", "Youssef", "Haddad", 14.0),
+    ]
+
+
 def add_student(last_name, first_name, dob, address, city, zip_code, phone, fax, email, group_id, section_id):
     """
     Insert a new student into the database
@@ -50,6 +98,7 @@ def add_student(last_name, first_name, dob, address, city, zip_code, phone, fax,
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Added student {first_name} {last_name}")
     return True
 
 
@@ -64,6 +113,7 @@ def update_student(student_id, last_name, first_name, dob, address, city, zip_co
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated student {student_id}")
     return True
 
 
@@ -77,6 +127,7 @@ def delete_student(student_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted student {student_id}")
     return True
 
 
@@ -118,6 +169,7 @@ def add_instructor(department_id, last_name, first_name, rank, phone, fax, email
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Added instructor {first_name} {last_name}")
     return True
 
 
@@ -132,6 +184,7 @@ def update_instructor(instructor_id, department_id, last_name, first_name, rank,
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated instructor {instructor_id}")
     return True
 
 
@@ -145,6 +198,7 @@ def delete_instructor(instructor_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted instructor {instructor_id}")
     return True
 
 
@@ -182,6 +236,7 @@ def add_course(course_id, department_id, name, description):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Added course {name}")
     return True
 
 
@@ -198,6 +253,7 @@ def update_course(course_id, department_id, name, description):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated course {course_id}")
     return True
 
 
@@ -212,6 +268,7 @@ def delete_course(course_id, department_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted course {course_id}")
     return True
 
 
@@ -246,6 +303,7 @@ def add_department(department_id, name):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Added department {name}")
     return True
 
 
@@ -260,6 +318,7 @@ def update_department(department_id, name):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated department {department_id}")
     return True
 
 
@@ -273,6 +332,7 @@ def delete_department(department_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted department {department_id}")
     return True
 
 
@@ -309,6 +369,7 @@ def add_room(building, roomno, capacity):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Added room {building} {roomno}")
     return True
 
 
@@ -324,6 +385,7 @@ def update_room(building, roomno, capacity):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated room {building} {roomno}")
     return True
 
 
@@ -338,6 +400,134 @@ def delete_room(building, roomno):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted room {building} {roomno}")
+    return True
+
+
+
+#? SECTION OPERATIONS
+
+
+def get_all_sections():
+    """
+    Retrieve all sections from the database
+    
+    Returns:
+        list[tuple]: List of section records
+        Format: (section_id, section_name)
+    """
+    return [
+        ("A", "Section A"),
+        ("B", "Section B"),
+        ("C", "Section C"),
+    ]
+
+
+def add_section(section_id, section_name):
+    """
+    Insert a new section into the database
+    
+    Args:
+        section_id (str): Section ID (single character)
+        section_name (str): Section name
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    logger.info(f"Mock: Added section {section_name}")
+    return True
+
+
+def update_section(section_id, section_name):
+    """
+    Update an existing section's information
+    
+    Args:
+        section_id (str): Section ID to update
+        section_name (str): New section name
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    logger.info(f"Mock: Updated section {section_id}")
+    return True
+
+
+def delete_section(section_id):
+    """
+    Delete a section from the database
+    
+    Args:
+        section_id (str): Section ID to delete
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    logger.info(f"Mock: Deleted section {section_id}")
+    return True
+
+
+
+#? GROUP OPERATIONS
+
+
+def get_all_groups():
+    """
+    Retrieve all groups from the database
+    
+    Returns:
+        list[tuple]: List of group records
+        Format: (group_id, group_name)
+    """
+    return [
+        (1, "Group 1"),
+        (2, "Group 2"),
+        (3, "Group 3"),
+        (4, "Group 4"),
+    ]
+
+
+def add_group(group_id, group_name):
+    """
+    Insert a new group into the database
+    
+    Args:
+        group_id (int): Group ID
+        group_name (str): Group name
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    logger.info(f"Mock: Added group {group_name}")
+    return True
+
+
+def update_group(group_id, group_name):
+    """
+    Update an existing group's information
+    
+    Args:
+        group_id (int): Group ID to update
+        group_name (str): New group name
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    logger.info(f"Mock: Updated group {group_id}")
+    return True
+
+
+def delete_group(group_id):
+    """
+    Delete a group from the database
+    
+    Args:
+        group_id (int): Group ID to delete
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    logger.info(f"Mock: Deleted group {group_id}")
     return True
 
 
@@ -361,6 +551,42 @@ def get_all_reservations():
     ]
 
 
+def get_reservations_by_filter(room=None, date=None):
+    """
+    Retrieve reservations filtered by room and/or date
+    
+    Args:
+        room (str, optional): Room identifier ("Building RoomNo")
+        date (str, optional): Date string (YYYY-MM-DD)
+        
+    Returns:
+        list[tuple]: List of reservation records
+    """
+    return get_all_reservations()
+
+
+def get_reservation_details(reservation_id):
+    """
+    Get detailed information about a specific reservation including names
+    
+    Args:
+        reservation_id (int): Reservation ID
+        
+    Returns:
+        dict: Dictionary with all reservation details including course and instructor names
+    """
+    return {
+        "reservation_id": reservation_id,
+        "room": "A 101",
+        "course_name": "Databases",
+        "instructor_name": "Dr. Abbas",
+        "date": "2025-10-01",
+        "start_time": "08:00:00",
+        "end_time": "10:00:00",
+        "hours": 2
+    }
+
+
 def add_reservation(building, roomno, course_id, department_id, instructor_id, 
                    reserv_date, start_time, end_time, hours_number):
     """
@@ -378,9 +604,11 @@ def add_reservation(building, roomno, course_id, department_id, instructor_id,
         hours_number (int): Duration in hours
     
     Returns:
-        bool: True if successful, False otherwise
+        tuple: (success: bool, new_reservation_id: int) 
     """
-    return True
+    mock_new_id = 999
+    logger.info(f"Mock: Added reservation - Building: {building}, Room: {roomno}, Course: {course_id}")
+    return (True, mock_new_id)
 
 
 def update_reservation(reservation_id, building, roomno, course_id, department_id, 
@@ -395,6 +623,7 @@ def update_reservation(reservation_id, building, roomno, course_id, department_i
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated reservation {reservation_id}")
     return True
 
 
@@ -408,6 +637,7 @@ def delete_reservation(reservation_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted reservation {reservation_id}")
     return True
 
 
@@ -425,21 +655,39 @@ def check_room_availability(building, roomno, reserv_date, start_time, end_time)
     Returns:
         bool: True if room is available, False if conflicted
     """
+    logger.info(f"Mock: Checking availability for {building} {roomno} on {reserv_date}")
     return True
 
-def get_reservations_by_filter(room=None, date=None):
+
+def get_courses_for_reservation():
     """
-    Retrieve reservations filtered by room and/or date
+    Get list of courses formatted for reservation dropdowns
     
-    Args:
-        room (str, optional): Room identifier ("Building RoomNo")
-        date (str, optional): Date string (YYYY-MM-DD)
-        
     Returns:
-        list[tuple]: List of reservation records
+        list[tuple]: List of (course_id, display_name, department_id)
     """
-    # Mock filtering logic or just return all for checking
-    return get_all_reservations()
+    courses = get_all_courses()
+    result = []
+    for course_id, dept_id, name, desc in courses:
+        display = f"{name} (Dept {dept_id})"
+        result.append((course_id, display, dept_id))
+    return result
+
+
+def get_instructors_for_reservation():
+    """
+    Get list of instructors formatted for reservation dropdowns
+    
+    Returns:
+        list[tuple]: List of (instructor_id, display_name, department_id)
+    """
+    instructors = get_all_instructors()
+    result = []
+    for inst_id, dept_id, last_name, first_name, rank, phone, fax, email in instructors:
+        display = f"{rank} {first_name} {last_name}"
+        result.append((inst_id, display, dept_id))
+    return result
+
 
 
 #? ENROLLMENT OPERATIONS
@@ -474,6 +722,7 @@ def add_enrollment(student_id, course_id, department_id, enrollment_date):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Added enrollment - Student: {student_id}, Course: {course_id}")
     return True
 
 
@@ -490,6 +739,7 @@ def update_enrollment(student_id, course_id, department_id, enrollment_date):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated enrollment - Student: {student_id}, Course: {course_id}")
     return True
 
 
@@ -505,6 +755,7 @@ def delete_enrollment(student_id, course_id, department_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted enrollment - Student: {student_id}, Course: {course_id}")
     return True
 
 
@@ -541,6 +792,7 @@ def add_mark(student_id, course_id, department_id, mark_value, mark_date):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Added mark - Student: {student_id}, Course: {course_id}, Value: {mark_value}")
     return True
 
 
@@ -555,6 +807,7 @@ def update_mark(mark_id, student_id, course_id, department_id, mark_value, mark_
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated mark {mark_id}")
     return True
 
 
@@ -568,33 +821,23 @@ def delete_mark(mark_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted mark {mark_id}")
     return True
 
-def get_students_for_grade_entry(course_id):
-    """
-    Get students enrolled in a specific course for grading.
-    
-    Args:
-        course_id (int): The course ID.
-        
-    Returns:
-        list[tuple]: List of students (id, name, etc.)
-    """
-    return get_all_students()
 
-def save_bulk_marks(course_id, exam_id, marks_data):
+def save_bulk_marks(marks_records):
     """
-    Save multiple marks at once.
+    Save multiple marks at once
     
     Args:
-        course_id (int): Course ID
-        exam_id (int): Exam/Activity ID
-        marks_data (list): List of dicts/tuples with student_id and mark
+        marks_records (list): List of dicts with student_id, course_id, exam_id, mark_value
         
     Returns:
         bool: True if successful
     """
+    logger.info(f"Mock: Saved {len(marks_records)} marks in bulk")
     return True
+
 
 
 #? ACTIVITY OPERATIONS
@@ -606,12 +849,13 @@ def get_all_activities():
     
     Returns:
         list[tuple]: List of activity records
-        Format: (activity_id, activity_type, reservation_id, course_id, department_id)
+        Format: (activity_id, activity_type, course_name)
     """
     return [
-        (1, "Lecture", 1, 1, 101),
-        (2, "Tutorial", 2, 1, 101),
-        (3, "Lab", 3, 2, 101),
+        (1, "Lecture", "Databases"),
+        (2, "Tutorial", "Databases"),
+        (3, "Lab", "Advanced Databases"),
+        (4, "Lecture", "Operating Systems"),
     ]
 
 
@@ -629,6 +873,7 @@ def add_activity(activity_id, activity_type, reservation_id, course_id, departme
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Added activity {activity_type} for course {course_id}")
     return True
 
 
@@ -643,6 +888,7 @@ def update_activity(activity_id, activity_type, reservation_id, course_id, depar
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated activity {activity_id}")
     return True
 
 
@@ -656,6 +902,7 @@ def delete_activity(activity_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted activity {activity_id}")
     return True
 
 
@@ -678,6 +925,24 @@ def get_all_exams():
     ]
 
 
+def get_exams_by_course(course_id):
+    """
+    Retrieve exams for a specific course
+    
+    Args:
+        course_id (int): Course ID
+    
+    Returns:
+        list[tuple]: List of exam records
+        Format: (exam_id, exam_type, duration, department_id)
+    """
+    return [
+        (1, "Midterm", 120, 101),
+        (2, "Final", 180, 101),
+        (3, "Quiz", 60, 101),
+    ]
+
+
 def add_exam(exam_id, duration, exam_type, course_id, department_id):
     """
     Insert a new exam into the database
@@ -692,6 +957,7 @@ def add_exam(exam_id, duration, exam_type, course_id, department_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Added exam {exam_type} for course {course_id}")
     return True
 
 
@@ -706,6 +972,7 @@ def update_exam(exam_id, duration, exam_type, course_id, department_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated exam {exam_id}")
     return True
 
 
@@ -719,6 +986,7 @@ def delete_exam(exam_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted exam {exam_id}")
     return True
 
 
@@ -754,6 +1022,7 @@ def add_attendance(student_id, activity_id, attendance_date, status):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Added attendance - Student: {student_id}, Activity: {activity_id}")
     return True
 
 
@@ -770,6 +1039,7 @@ def update_attendance(student_id, activity_id, attendance_date, status):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Updated attendance - Student: {student_id}, Activity: {activity_id}")
     return True
 
 
@@ -785,38 +1055,26 @@ def delete_attendance(student_id, activity_id, attendance_date):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Deleted attendance - Student: {student_id}, Activity: {activity_id}")
     return True
 
-def get_students_by_section_group(section, group):
-    """
-    Get students filtered by section and group.
-    
-    Args:
-        section (str): Section ID
-        group (str): Group ID
-        
-    Returns:
-        list[tuple]: List of matching students
-    """
-    return get_all_students()
 
-def save_bulk_attendance(activity_id, attendance_data):
+def save_bulk_attendance(attendance_records):
     """
-    Save multiple attendance records at once.
+    Save multiple attendance records at once
     
     Args:
-        activity_id (int): Activity ID
-        attendance_data (list): List of (student_id, status)
+        attendance_records (list): List of dicts with student_id, activity_id, date, status
         
     Returns:
         bool: True if successful
     """
+    logger.info(f"Mock: Saved {len(attendance_records)} attendance records in bulk")
     return True
 
 
-#? INSTRUCTOR-COURSE ASSIGNMENT OPERATIONS
 
-#! NOTE: This requires creating a new table in the database
+#? INSTRUCTOR-COURSE ASSIGNMENT OPERATIONS
 
 
 def get_all_instructor_course_assignments():
@@ -825,11 +1083,11 @@ def get_all_instructor_course_assignments():
     
     Returns:
         list[tuple]: List of assignment records
-        Format: (instructor_id,instructor_name, course_id,course_name, department_id, assignment_date)
+        Format: (instructor_id, instructor_name, course_id, course_name, department_id, assignment_date)
     """
     return [
-        (1,"Dr. Abbas BenAbbes", 1, "Databases", 101, "2025-09-01"),
-        (2,"Dr. Mokhtar BenMokhtar", 2,"Advanced Databases", 101, "2025-09-01"),
+        (1, "Dr. Abbas BenAbbes", 1, "Databases", 101, "2025-09-01"),
+        (2, "Dr. Mokhtar BenMokhtar", 2, "Advanced Databases", 101, "2025-09-01"),
     ]
 
 
@@ -846,6 +1104,7 @@ def assign_instructor_to_course(instructor_id, course_id, department_id, assignm
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Assigned instructor {instructor_id} to course {course_id}")
     return True
 
 
@@ -861,6 +1120,7 @@ def remove_instructor_from_course(instructor_id, course_id, department_id):
     Returns:
         bool: True if successful, False otherwise
     """
+    logger.info(f"Mock: Removed instructor {instructor_id} from course {course_id}")
     return True
 
 
@@ -870,7 +1130,6 @@ def get_instructor_list_with_ids():
     
     Returns:
         list[tuple]: List of (instructor_id, full_name, department_id)
-        Format: [(1, "Dr. Abbas BenAbbes", 101), ...]
     """
     instructors = get_all_instructors()
     result = []
@@ -887,7 +1146,6 @@ def get_course_list_with_ids():
     
     Returns:
         list[tuple]: List of (course_id, course_name, department_id)
-        Format: [(1, "Databases", 101), ...]
     """
     courses = get_all_courses()
     result = []
@@ -896,174 +1154,14 @@ def get_course_list_with_ids():
         result.append((course_id, name, dept_id))
     return result
 
-#? RESERVATION MANAGEMENT OPERATIONS
-
-def get_all_reservations():
-    """
-    Retrieve all reservations from the database
-    
-    Returns:
-        list[tuple]: List of reservation records
-        Format: (reservation_id, building, roomno, course_id, department_id,
-                 instructor_id, reserv_date, start_time, end_time, hours_number)
-    """
-    return [
-        (1, "A", "101", 1, 101, 1, "2025-10-01", "08:00:00", "10:00:00", 2),
-        (2, "B", "201", 2, 101, 2, "2025-10-01", "10:00:00", "12:00:00", 2),
-        (3, "C", "AUDITORIUM", 3, 102, 4, "2025-10-02", "14:00:00", "16:00:00", 2),
-    ]
 
 
-def add_reservation(building, roomno, course_id, department_id, instructor_id, 
-                   reserv_date, start_time, end_time, hours_number):
-    """
-    Insert a new reservation into the database
-    
-    Args:
-        building (str): Building code
-        roomno (str): Room number
-        course_id (int): Course ID
-        department_id (int): Department ID
-        instructor_id (int): Instructor ID
-        reserv_date (str): Reservation date (YYYY-MM-DD)
-        start_time (str): Start time (HH:MM:SS)
-        end_time (str): End time (HH:MM:SS)
-        hours_number (int): Duration in hours
-    
-    Returns:
-        tuple: (success: bool, new_reservation_id: int) 
-               For now returns (True, mock_id) to simulate success
-    """
-    mock_new_id = 999  
-    logger = __import__('logging').getLogger(__name__)
-    logger.info(f"Mock: Added reservation - Building: {building}, Room: {roomno}, Course: {course_id}")
-    return (True, mock_new_id)
-
-
-def update_reservation(reservation_id, building, roomno, course_id, department_id, 
-                      instructor_id, reserv_date, start_time, end_time, hours_number):
-    """
-    Update an existing reservation's information
-    
-    Args:
-        reservation_id (int): Reservation ID to update
-        (same parameters as add_reservation)
-    
-    Returns:
-        bool: True if successful, False otherwise
-    """
-
-    logger = __import__('logging').getLogger(__name__)
-    logger.info(f"Mock: Updated reservation {reservation_id}")
-    return True
-
-
-def delete_reservation(reservation_id):
-    """
-    Delete a reservation from the database
-    
-    Args:
-        reservation_id (int): Reservation ID to delete
-    
-    Returns:
-        bool: True if successful, False otherwise
-    """
-    logger = __import__('logging').getLogger(__name__)
-    logger.info(f"Mock: Deleted reservation {reservation_id}")
-    return True
-
-
-def check_room_availability(building, roomno, reserv_date, start_time, end_time):
-    """
-    Check if a room is available for reservation
-    
-    Args:
-        building (str): Building code
-        roomno (str): Room number
-        reserv_date (str): Desired date (YYYY-MM-DD)
-        start_time (str): Desired start time (HH:MM:SS)
-        end_time (str): Desired end time (HH:MM:SS)
-    
-    Returns:
-        bool: True if room is available, False if conflicted
-    """
-    logger = __import__('logging').getLogger(__name__)
-    logger.info(f"Mock: Checking availability for {building} {roomno} on {reserv_date}")
-    return True
-
-
-#? RESERVATION MANAGEMENT HELPER OPERATIONS
-
-def get_courses_for_reservation():
-    """
-    Get list of courses formatted for reservation dropdowns
-    
-    Returns:
-        list[tuple]: List of (course_id, display_name, department_id)
-    """
-    courses = get_all_courses()
-    result = []
-    for course_id, dept_id, name, desc in courses:
-        display = f"{name} (Dept {dept_id})"
-        result.append((course_id, display, dept_id))
-    return result
-
-
-def get_instructors_for_reservation():
-    """
-    Get list of instructors formatted for reservation dropdowns
-    
-    Returns:
-        list[tuple]: List of (instructor_id, display_name, department_id)
-    """
-    instructors = get_all_instructors()
-    result = []
-    for inst_id, dept_id, last_name, first_name, rank, phone, fax, email in instructors:
-        display = f"{rank} {first_name} {last_name}"
-        result.append((inst_id, display, dept_id))
-    return result
-
-
-def get_reservation_details(reservation_id):
-    """
-    Get detailed information about a specific reservation including names
-    
-    Args:
-        reservation_id (int): Reservation ID
-        
-    Returns:
-        dict: Dictionary with all reservation details including course and instructor names
-    """
-    return {
-        "reservation_id": reservation_id,
-        "room": "A 101",
-        "course_name": "Databases",
-        "instructor_name": "Dr. Abbas",
-        "date": "2025-10-01",
-        "start_time": "08:00:00",
-        "end_time": "10:00:00",
-        "hours": 2
-    }
-
-
-def get_reservations_by_filter(room=None, date=None):
-    """
-    Retrieve reservations filtered by room and/or date
-    
-    Args:
-        room (str, optional): Room identifier ("Building RoomNo")
-        date (str, optional): Date string (YYYY-MM-DD)
-        
-    Returns:
-        list[tuple]: List of reservation records
-    """
-
-    return get_all_reservations()
 #? QUERY OPERATIONS
+
 
 def get_available_queries():
     """
-    Retrieve list of available pre-defined queries.
+    Retrieve list of available pre-defined queries
     
     Returns:
         list[str]: List of query names/descriptions
@@ -1075,9 +1173,10 @@ def get_available_queries():
         "Rooms fully booked today",
     ]
 
+
 def execute_query(query_name):
     """
-    Execute a specific named query.
+    Execute a specific named query
     
     Args:
         query_name (str): The name/ID of the query to execute
@@ -1098,11 +1197,13 @@ def execute_query(query_name):
         return headers, data
 
 
+
 #? AUDIT OPERATIONS
+
 
 def get_audit_logs(from_date, to_date, table_name):
     """
-    Retrieve audit logs filtered by date range and table.
+    Retrieve audit logs filtered by date range and table
     
     Args:
         from_date (str): Start date
@@ -1118,9 +1219,10 @@ def get_audit_logs(from_date, to_date, table_name):
         ("2025-12-29 09:15", "user", "DELETE", "Reservations", "Removed Reservation 5"),
     ]
 
+
 def get_table_names():
     """
-    Retrieve list of database table names.
+    Retrieve list of database table names
     
     Returns:
         list[str]: List of tables
@@ -1128,11 +1230,13 @@ def get_table_names():
     return ["Students", "Instructors", "Courses", "Marks", "Attendance", "Reservations"]
 
 
+
 #? RESULTS OPERATIONS
+
 
 def get_student_results(semester, course_id):
     """
-    Retrieve results for a specific semester and course.
+    Retrieve results for a specific semester and course
     
     Args:
         semester (str): Semester ID/Name
@@ -1147,9 +1251,10 @@ def get_student_results(semester, course_id):
         ("3", "Sara Belkacem", 18.0, "Distinction"),
     ]
 
+
 def get_semesters_list():
     """
-    Retrieve list of semesters.
+    Retrieve list of semesters
     
     Returns:
         list[str]: List of semesters
@@ -1157,11 +1262,13 @@ def get_semesters_list():
     return ["S1 2025/2026", "S2 2025/2026", "S1 2024/2025"]
 
 
+
 #? PERFORMANCE OPERATIONS
+
 
 def get_performance_stats():
     """
-    Retrieve general performance statistics.
+    Retrieve general performance statistics
     
     Returns:
         dict: Dictionary of statistics
