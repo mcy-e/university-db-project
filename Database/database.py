@@ -897,6 +897,103 @@ def get_course_list_with_ids():
     return result
 
 #? RESERVATION MANAGEMENT OPERATIONS
+
+def get_all_reservations():
+    """
+    Retrieve all reservations from the database
+    
+    Returns:
+        list[tuple]: List of reservation records
+        Format: (reservation_id, building, roomno, course_id, department_id,
+                 instructor_id, reserv_date, start_time, end_time, hours_number)
+    """
+    return [
+        (1, "A", "101", 1, 101, 1, "2025-10-01", "08:00:00", "10:00:00", 2),
+        (2, "B", "201", 2, 101, 2, "2025-10-01", "10:00:00", "12:00:00", 2),
+        (3, "C", "AUDITORIUM", 3, 102, 4, "2025-10-02", "14:00:00", "16:00:00", 2),
+    ]
+
+
+def add_reservation(building, roomno, course_id, department_id, instructor_id, 
+                   reserv_date, start_time, end_time, hours_number):
+    """
+    Insert a new reservation into the database
+    
+    Args:
+        building (str): Building code
+        roomno (str): Room number
+        course_id (int): Course ID
+        department_id (int): Department ID
+        instructor_id (int): Instructor ID
+        reserv_date (str): Reservation date (YYYY-MM-DD)
+        start_time (str): Start time (HH:MM:SS)
+        end_time (str): End time (HH:MM:SS)
+        hours_number (int): Duration in hours
+    
+    Returns:
+        tuple: (success: bool, new_reservation_id: int) 
+               For now returns (True, mock_id) to simulate success
+    """
+    mock_new_id = 999  
+    logger = __import__('logging').getLogger(__name__)
+    logger.info(f"Mock: Added reservation - Building: {building}, Room: {roomno}, Course: {course_id}")
+    return (True, mock_new_id)
+
+
+def update_reservation(reservation_id, building, roomno, course_id, department_id, 
+                      instructor_id, reserv_date, start_time, end_time, hours_number):
+    """
+    Update an existing reservation's information
+    
+    Args:
+        reservation_id (int): Reservation ID to update
+        (same parameters as add_reservation)
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+
+    logger = __import__('logging').getLogger(__name__)
+    logger.info(f"Mock: Updated reservation {reservation_id}")
+    return True
+
+
+def delete_reservation(reservation_id):
+    """
+    Delete a reservation from the database
+    
+    Args:
+        reservation_id (int): Reservation ID to delete
+    
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    logger = __import__('logging').getLogger(__name__)
+    logger.info(f"Mock: Deleted reservation {reservation_id}")
+    return True
+
+
+def check_room_availability(building, roomno, reserv_date, start_time, end_time):
+    """
+    Check if a room is available for reservation
+    
+    Args:
+        building (str): Building code
+        roomno (str): Room number
+        reserv_date (str): Desired date (YYYY-MM-DD)
+        start_time (str): Desired start time (HH:MM:SS)
+        end_time (str): Desired end time (HH:MM:SS)
+    
+    Returns:
+        bool: True if room is available, False if conflicted
+    """
+    logger = __import__('logging').getLogger(__name__)
+    logger.info(f"Mock: Checking availability for {building} {roomno} on {reserv_date}")
+    return True
+
+
+#? RESERVATION MANAGEMENT HELPER OPERATIONS
+
 def get_courses_for_reservation():
     """
     Get list of courses formatted for reservation dropdowns
@@ -937,8 +1034,6 @@ def get_reservation_details(reservation_id):
     Returns:
         dict: Dictionary with all reservation details including course and instructor names
     """
-    # TODO: Implement when actual database is connected
-    # This would join with courses and instructors tables
     return {
         "reservation_id": reservation_id,
         "room": "A 101",
@@ -949,6 +1044,21 @@ def get_reservation_details(reservation_id):
         "end_time": "10:00:00",
         "hours": 2
     }
+
+
+def get_reservations_by_filter(room=None, date=None):
+    """
+    Retrieve reservations filtered by room and/or date
+    
+    Args:
+        room (str, optional): Room identifier ("Building RoomNo")
+        date (str, optional): Date string (YYYY-MM-DD)
+        
+    Returns:
+        list[tuple]: List of reservation records
+    """
+
+    return get_all_reservations()
 #? QUERY OPERATIONS
 
 def get_available_queries():

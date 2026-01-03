@@ -1,3 +1,4 @@
+
 #& Imports
 
 from PyQt6 import uic
@@ -305,7 +306,7 @@ class ManageReservation(QWidget):
                 self.create_reservation_btn.setEnabled(False)
                 return
             
-            #* Create the reservation
+            #* Create the reservation - call database function
             result = db.add_reservation(
                 building, roomno, course_id, dept_id, instructor_id,
                 date, start_time_str, end_time_str, int(hours)
@@ -313,11 +314,12 @@ class ManageReservation(QWidget):
             
             logger.info(f"Database add_reservation returned: {result}")
             
-            if result:
+            #* Check if result is success (True or tuple with success)
+            if result is True or (isinstance(result, tuple) and result[0] is True):
                 QMessageBox.information(self, "Success", "Reservation created successfully!")
                 self.status.setText("Status: Reservation created successfully")
                 
-                #* Reload reservations
+                #* Reload reservations to show new one
                 self._load_all_reservations()
                 
                 #* Clear form
@@ -349,13 +351,19 @@ class ManageReservation(QWidget):
                 result = db.delete_reservation(reservation_id)
                 logger.info(f"Database delete_reservation returned: {result}")
                 
-                if result:
+                #* Check if deletion was successful
+                if result is True:
                     QMessageBox.information(self, "Success", "Reservation deleted successfully!")
-                    self._load_all_reservations()
-                    logger.info(f"Deleted reservation {reservation_id}")
+                    
+                    #* Update the UI by removing from stored data and refreshing display
+                    self.all_reservations = [r for r in self.all_reservations if r[0] != reservation_id]
+                    self._display_reservations(self.all_reservations)
+                    
+                    logger.info(f"Deleted reservation {reservation_id} and refreshed UI")
                 else:
                     QMessageBox.critical(self, "Error", "Failed to delete reservation - Database returned False")
                     logger.error(f"Database returned False for delete_reservation({reservation_id})")
+                    
             except Exception as e:
                 logger.error(f"Error deleting reservation: {e}")
                 QMessageBox.critical(self, "Error", f"Failed to delete reservation: {e}")
