@@ -173,7 +173,7 @@
      <item>
       <layout class="QVBoxLayout" name="bottom">
        <item>
-        <widget class="QTableView" name="table"/>
+        <widget class="QTableWidget" name="table"/>
        </item>
       </layout>
      </item>
