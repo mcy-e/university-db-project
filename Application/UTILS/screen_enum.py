@@ -38,3 +38,6 @@ class Screens(IntEnum):
     
     #* Audit Viewer
     AUDIT_VIEWER = 21
+
+    #* Settings
+    SETTINGS_SCREEN=22
