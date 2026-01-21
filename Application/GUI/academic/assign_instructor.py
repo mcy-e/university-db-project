@@ -46,7 +46,12 @@ class AssignInstructor(QWidget):
 
         self.instructor_data = []  #* Store tuple data
         self.course_data = []      #* Store tuple data
-        self.headers = ["Instructor ID", "Instructor", "Course ID", "Course", "Department ID", "Date Assigned"]
+        self.headers = [self.tr("Instructor ID"),
+                        self.tr("Instructor"),
+                        self.tr("Course ID"),
+                        self.tr("Course"),
+                        self.tr("Department ID"),
+                        self.tr("Date Assigned")]
         
         self._load_data()
         self._connect_signals()

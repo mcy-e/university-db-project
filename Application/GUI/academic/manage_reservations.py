@@ -55,7 +55,15 @@ class ManageReservation(QWidget):
 
     #* Setup the reservations table
     def _setup_table(self):
-        headers = ["ID", "Room", "Course", "Instructor", "Date", "Start", "End", "Hours", "Actions"]
+        headers = [ self.tr("ID"),
+                    self.tr("Room"),
+                    self.tr("Course"),
+                    self.tr("Instructor"),
+                    self.tr("Date"),
+                    self.tr("Start"),
+                    self.tr("End"),
+                    self.tr("Hours"),
+                    self.tr("Actions")]
         self.table.setColumnCount(len(headers))
         self.table.setHorizontalHeaderLabels(headers)
         
@@ -78,13 +86,16 @@ class ManageReservation(QWidget):
     #* Populate all dropdown menus with data
     def _populate_dropdowns(self):
         #* Populate purpose (Activity types)
-        activities = ["Lecture", "Tutorial", "Practical", "Exam"]
+        activities = [self.tr("Lecture"),
+                     self.tr("Tutorial"),
+                     self.tr("Practical"),
+                     self.tr("Exam")]
         self.purpose_selection.addItems(activities)
         
         #* Populate rooms
         rooms = db.get_all_rooms()
-        self.room_selection.addItem("Select Room")
-        self.room_filter_selection.addItem("All Rooms")
+        self.room_selection.addItem(self.tr("Select Room"))
+        self.room_filter_selection.addItem(self.tr("All Rooms"))
        
         for building, roomno, capacity in rooms:
             room_display = f"{building} {roomno} (Cap: {capacity})"
@@ -93,13 +104,13 @@ class ManageReservation(QWidget):
         
         #* Populate courses
         courses = db.get_courses_for_reservation()
-        self.course_selection.addItem("Select Course")
+        self.course_selection.addItem(self.tr("Select Course"))
         for course_id, display, dept_id in courses:
             self.course_selection.addItem(display, userData=(course_id, dept_id))
         
         #* Populate instructors
         instructors = db.get_instructors_for_reservation()
-        self.instructor_selection.addItem("Select Instructor")
+        self.instructor_selection.addItem(self.tr("Select Instructor"))
         for inst_id, display, dept_id in instructors:
             self.instructor_selection.addItem(display, userData=(inst_id, dept_id))
         
@@ -114,7 +125,7 @@ class ManageReservation(QWidget):
             logger.info(f"Loaded {len(reservations)} reservations")
         except Exception as e:
             logger.error(f"Error loading reservations: {e}")
-            QMessageBox.critical(self, "Error", f"Failed to load reservations: {e}")
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to load reservations:")+ f" {e}")
 
     #* Display reservations in the table
     def _display_reservations(self, reservations):
@@ -194,12 +205,12 @@ class ManageReservation(QWidget):
     def _refresh_table(self):
         logger.info("Refreshing reservations table")
         self._load_all_reservations()
-        self.status.setText("Status: Table refreshed")
+        self.status.setText(self.tr("Status: Table refreshed"))
 
     #* Handle form changes - disable create button when form is modified
     def _on_form_change(self):
         self.create_reservation_btn.setEnabled(False)
-        self.status.setText("Status: Check availability before creating")
+        self.status.setText(self.tr("Status: Check availability before creating"))
 
     #* Validate working hours
     def _validate_working_hours(self, start_time, end_time):
@@ -211,23 +222,23 @@ class ManageReservation(QWidget):
     def _check_availability(self):
         #* Validate room selection
         if self.room_selection.currentIndex() == 0:
-            self.status.setText("Status: Please select a room")
+            self.status.setText(self.tr("Status: Please select a room"))
             return
         
         #* Validate course selection
         if self.course_selection.currentIndex() == 0:
-            self.status.setText("Status: Please select a course")
+            self.status.setText(self.tr("Status: Please select a course"))
             return
         
         #* Validate instructor selection
         if self.instructor_selection.currentIndex() == 0:
-            self.status.setText("Status: Please select an instructor")
+            self.status.setText(self.tr("Status: Please select an instructor"))
             return
         
         #* Get selected data
         room_data = self.room_selection.currentData()
         if not room_data:
-            self.status.setText("Status: Invalid room selection")
+            self.status.setText(self.tr("Status: Invalid room selection"))
             return
         
         building, roomno = room_data
@@ -237,7 +248,7 @@ class ManageReservation(QWidget):
         
         #* Validate time range
         if start_time >= end_time:
-            self.status.setText("Status: End time must be after start time")
+            self.status.setText(self.tr("Status: End time must be after start time"))
             return
         
         #* Validate working hours
@@ -254,17 +265,17 @@ class ManageReservation(QWidget):
             is_available = db.check_room_availability(building, roomno, date, start_time_str, end_time_str)
             
             if is_available:
-                self.status.setText("Status: Room is available! You can now create the reservation")
+                self.status.setText(self.tr("Status: Room is available! You can now create the reservation"))
                 self.create_reservation_btn.setEnabled(True)
                 logger.info(f"Room {building} {roomno} is available on {date} from {start_time_str} to {end_time_str}")
             else:
-                self.status.setText("Status: Room is already booked for this time")
+                self.status.setText(self.tr("Status: Room is already booked for this time"))
                 self.create_reservation_btn.setEnabled(False)
                 logger.warning(f"Room {building} {roomno} conflict on {date}")
                 
         except Exception as e:
             logger.error(f"Error checking availability: {e}")
-            self.status.setText("Status: Error checking availability")
+            self.status.setText(self.tr("Status: Error checking availability"))
             self.create_reservation_btn.setEnabled(False)
 
     #* Create a new reservation
@@ -275,7 +286,7 @@ class ManageReservation(QWidget):
         instructor_data = self.instructor_selection.currentData()
         
         if not room_data or not course_data or not instructor_data:
-            QMessageBox.warning(self, "Validation Error", "Please select all required fields")
+            QMessageBox.warning(self, self.tr("Validation Error"), self.tr("Please select all required fields"))
             return
         
         building, roomno = room_data
@@ -300,8 +311,8 @@ class ManageReservation(QWidget):
             if not is_available:
                 QMessageBox.warning(
                     self, 
-                    "Reservation Conflict", 
-                    "This room is no longer available. Please check availability again."
+                    self.tr("Reservation Conflict"), 
+                    self.tr("This room is no longer available. Please check availability again.")
                 )
                 self.create_reservation_btn.setEnabled(False)
                 return
@@ -316,8 +327,8 @@ class ManageReservation(QWidget):
             
             #* Check if result is success (True or tuple with success)
             if result is True or (isinstance(result, tuple) and result[0] is True):
-                QMessageBox.information(self, "Success", "Reservation created successfully!")
-                self.status.setText("Status: Reservation created successfully")
+                QMessageBox.information(self, self.tr("Success"), self.tr("Reservation created successfully!"))
+                self.status.setText(self.tr("Status: Reservation created successfully"))
                 
                 #* Reload reservations to show new one
                 self._load_all_reservations()
@@ -327,12 +338,12 @@ class ManageReservation(QWidget):
                 
                 logger.info(f"Created reservation for {building} {roomno} on {date}")
             else:
-                QMessageBox.critical(self, "Error", "Failed to create reservation - Database returned False")
+                QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to create reservation - Database returned False"))
                 logger.error("Database returned False for add_reservation")
                 
         except Exception as e:
             logger.error(f"Error creating reservation: {e}")
-            QMessageBox.critical(self, "Error", f"Failed to create reservation: {e}")
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to create reservation:") +f" {e}")
 
     #* Delete a reservation
     def _delete_reservation(self, reservation_id):
@@ -340,8 +351,8 @@ class ManageReservation(QWidget):
         
         reply = QMessageBox.question(
             self,
-            "Confirm Deletion",
-            f"Are you sure you want to delete reservation #{reservation_id}?",
+            self.tr("Confirm Deletion"),
+            self.tr("Are you sure you want to delete reservation") +f" #{reservation_id}?",
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         
@@ -353,7 +364,7 @@ class ManageReservation(QWidget):
                 
                 #* Check if deletion was successful
                 if result is True:
-                    QMessageBox.information(self, "Success", "Reservation deleted successfully!")
+                    QMessageBox.information(self, self.tr("Success"), self.tr("Reservation deleted successfully!"))
                     
                     #* Update the UI by removing from stored data and refreshing display
                     self.all_reservations = [r for r in self.all_reservations if r[0] != reservation_id]
@@ -361,12 +372,12 @@ class ManageReservation(QWidget):
                     
                     logger.info(f"Deleted reservation {reservation_id} and refreshed UI")
                 else:
-                    QMessageBox.critical(self, "Error", "Failed to delete reservation - Database returned False")
+                    QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to delete reservation - Database returned False"))
                     logger.error(f"Database returned False for delete_reservation({reservation_id})")
                     
             except Exception as e:
                 logger.error(f"Error deleting reservation: {e}")
-                QMessageBox.critical(self, "Error", f"Failed to delete reservation: {e}")
+                QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to delete reservation:") + f" {e}")
 
     #* Clear the reservation form
     def _clear_form(self):
@@ -377,7 +388,7 @@ class ManageReservation(QWidget):
         self.date_edit.setDate(QDate.currentDate())
         self.start_edit.setTime(WORK_START_TIME)
         self.end_edit.setTime(QTime(10, 0))
-        self.status.setText("Status:")
+        self.status.setText(self.tr("Status:"))
         self.create_reservation_btn.setEnabled(False)
 
     #* Apply room and date filters to the reservation table
