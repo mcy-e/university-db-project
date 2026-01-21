@@ -43,7 +43,7 @@ class ActivityCRUD(BaseCRUD):
             #* Special case for Activity_Type
             if header == "Activity_Type":
                 input_widget = QComboBox()
-                input_widget.addItems(['lecture', 'tutorial', 'practical'])
+                input_widget.addItems([self.tr('lecture'), self.tr('tutorial'), self.tr('practical')])
                 input_widget.setEditable(False)
             else:
                 input_widget = QLineEdit()

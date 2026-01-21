@@ -41,7 +41,7 @@ class AttendanceCRUD(BaseCRUD):
             #* Special case for Status
             if header == "Status":
                 input_widget = QComboBox()
-                input_widget.addItems(['present', 'absent'])
+                input_widget.addItems([self.tr('present'), self.tr('absent')])
                 input_widget.setEditable(False)
             else:
                 input_widget = QLineEdit()
