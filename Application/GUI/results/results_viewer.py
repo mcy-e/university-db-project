@@ -36,7 +36,10 @@ class ResultViewer(QWidget):
     #* Setup the results table with proper columns
     def _setup_table(self):
          
-        headers = ["Student ID", "Full Name", "Mark", "Status"]
+        headers = [self.tr("Student ID"),
+                    self.tr("Full Name"),
+                    self.tr("Mark"),
+                    self.tr("Status")]
         self.table.setColumnCount(len(headers))
         self.table.setHorizontalHeaderLabels(headers)
         
@@ -55,13 +58,13 @@ class ResultViewer(QWidget):
         
         #* Populate semesters
         semesters = db.get_semesters_list()
-        self.semester_selection.addItem("Select Semester")
+        self.semester_selection.addItem(self.tr("Select Semester"))
         for semester in semesters:
             self.semester_selection.addItem(semester)
         
         #* Populate courses
         courses = db.get_all_courses()
-        self.course_selection.addItem("Select Course")
+        self.course_selection.addItem(self.tr("Select Course"))
         for course_id, dept_id, course_name, description in courses:
             display = f"{course_name} (Dept {dept_id})"
             self.course_selection.addItem(display, userData=course_id)
@@ -97,7 +100,7 @@ class ResultViewer(QWidget):
             logger.info(f"Loaded {len(results)} results")
         except Exception as e:
             logger.error(f"Error loading results: {e}")
-            QMessageBox.critical(self, "Error", f"Failed to load results: {e}")
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to load results:") + f" {e}")
 
     #* Display results in the table 
     def _display_results(self, results):
@@ -119,5 +122,5 @@ class ResultViewer(QWidget):
     #* Export results to PDF
     def _export_to_pdf(self):
  
-        QMessageBox.information(self, "Export", "PDF export functionality coming soon!")
+        QMessageBox.information(self, self.tr("Export"), self.tr("PDF export functionality coming soon!"))
         logger.info("PDF export requested")

@@ -42,7 +42,7 @@ class AuditViewer(QWidget):
     #* Setup the audit log table with proper columns
     def _setup_table(self):
  
-        headers = ["Timestamp", "User", "Action", "Table", "Details"]
+        headers = [self.tr("Timestamp"),self.tr("User"),self.tr("Action"),self.tr("Table"),self.tr("Details")]
         self.table.setColumnCount(len(headers))
         self.table.setHorizontalHeaderLabels(headers)
         
@@ -59,7 +59,7 @@ class AuditViewer(QWidget):
     #* Populate the table filter dropdown
     def _populate_table_filter(self):
 
-        self.table_selection.addItem("All Tables")
+        self.table_selection.addItem(self.tr("All Tables"))
         
         tables = db.get_table_names()
         for table in tables:
@@ -91,7 +91,7 @@ class AuditViewer(QWidget):
             logger.info(f"Filtered logs: {len(logs)} records found")
         except Exception as e:
             logger.error(f"Error filtering logs: {e}")
-            QMessageBox.critical(self, "Error", f"Failed to filter logs: {e}")
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to filter logs:") + f" {e}" )
 
     #* Refresh the audit logs
     def _refresh_logs(self):

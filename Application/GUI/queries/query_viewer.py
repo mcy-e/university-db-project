@@ -42,7 +42,7 @@ class QueryViewer(QWidget):
     def _populate_queries(self):
  
         queries = db.get_available_queries()
-        self.query_selection.addItem("Select Query")
+        self.query_selection.addItem(self.tr("Select Query"))
         
         for query in queries:
             self.query_selection.addItem(query)
@@ -63,7 +63,7 @@ class QueryViewer(QWidget):
         query_index = self.query_selection.currentIndex()
         
         if query_index == 0:
-            QMessageBox.warning(self, "Validation Error", "Please select a query")
+            QMessageBox.warning(self, self.tr("Validation Error"), self.tr("Please select a query"))
             return
         
         query_name = self.query_selection.currentText()
@@ -72,12 +72,12 @@ class QueryViewer(QWidget):
             headers, data = db.execute_query(query_name)
             self._display_results(headers, data)
             
-            self.state.setText(f"Success - {len(data)} rows")
+            self.state.setText(self.tr("Success ") + f"{len(data)}" +self.tr ("rows"))
             logger.info(f"Executed query: {query_name}")
         except Exception as e:
             logger.error(f"Error executing query: {e}")
-            self.state.setText("Error")
-            QMessageBox.critical(self, "Error", f"Failed to execute query: {e}")
+            self.state.setText(self.tr("Error"))
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to execute query:") +f" {e}")
 
     #* Display query results in the table
     def _display_results(self, headers, data):
