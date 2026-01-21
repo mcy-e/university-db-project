@@ -41,7 +41,11 @@ class AttendanceEntry(QWidget):
     #* Setup the attendance table with proper columns    
     def _setup_table(self):
         
-        headers = ["Student ID", "Full Name", "Group", "Section", "Present"]
+        headers = [self.tr("Student ID"),
+                   self.tr("Full Name"),
+                   self.tr("Group"),
+                   self.tr("Section"),
+                   self.tr("Present")]
         self.table.setColumnCount(len(headers))
         self.table.setHorizontalHeaderLabels(headers)
         
@@ -66,19 +70,19 @@ class AttendanceEntry(QWidget):
 
         #* Populate sections
         sections = db.get_all_sections()
-        self.section_selection.addItem("All Sections")
+        self.section_selection.addItem(self.tr("All Sections"))
         for section_id, section_name in sections:
             self.section_selection.addItem(section_name, userData=section_id)
         
         #* Populate groups
         groups = db.get_all_groups()
-        self.group_selection.addItem("All Groups")
+        self.group_selection.addItem(self.tr("All Groups"))
         for group_id, group_name in groups:
             self.group_selection.addItem(group_name, userData=group_id)
         
         #* Populate activities
         activities = db.get_all_activities()
-        self.activity_selection.addItem("Select Activity")
+        self.activity_selection.addItem(self.tr("Select Activity"))
         for activity_id, activity_type, course_name in activities:
             display = f"{activity_type} - {course_name}"
             self.activity_selection.addItem(display, userData=activity_id)
@@ -123,7 +127,7 @@ class AttendanceEntry(QWidget):
             logger.info(f"Loaded {len(self.students_data)} students (Section: {section_id}, Group: {group_id})")
         except Exception as e:
             logger.error(f"Error loading students: {e}")
-            QMessageBox.critical(self, "Error", f"Failed to load students: {e}")
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to load students:") + f" {e}")
 
     #* Display students in the table with attendance checkboxes
     def _display_students(self):
@@ -185,7 +189,7 @@ class AttendanceEntry(QWidget):
     def _save_attendance(self):
         #* Validate activity selection
         if self.activity_selection.currentIndex() == 0:
-            QMessageBox.warning(self, "Validation Error", "Please select an activity")
+            QMessageBox.warning(self, self.tr("Validation Error"), self.tr("Please select an activity"))
             return
         
         activity_id = self.activity_selection.currentData()
@@ -218,20 +222,20 @@ class AttendanceEntry(QWidget):
             if success:
                 QMessageBox.information(
                     self, 
-                    "Success", 
-                    f"Attendance saved successfully for {len(attendance_records)} students!"
+                    self.tr("Success"), 
+                    self.tr("Attendance saved successfully for") + f"{len(attendance_records)}" +self.tr("students!")
                 )
                 logger.info(f"Saved attendance for activity {activity_id} on {attendance_date}")
                 
                 #* Clear the form
                 self._clear_form()
             else:
-                QMessageBox.critical(self, "Error", "Failed to save attendance,database returned False")
+                QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to save attendance,database returned False"))
                 logger.error("Database returned False for save_bulk_attendance")
                 
         except Exception as e:
             logger.error(f"Error saving attendance: {e}")
-            QMessageBox.critical(self, "Error", f"Failed to save attendance: {e}")
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to save attendance:") +f" {e}")
 
     #* Clear the form after successful save
     def _clear_form(self):

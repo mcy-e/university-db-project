@@ -38,7 +38,10 @@ class MarksEntry(QWidget):
     #* Setup the marks entry table with proper columns
     def _setup_table(self):
 
-        headers = ["Student ID", "Full Name", "Current Mark", "New Mark"]
+        headers = [ self.tr("Student ID"),
+                    self.tr("Full Name"),
+                    self.tr("Current Mark"),
+                    self.tr("New Mark")]
         self.table.setColumnCount(len(headers))
         self.table.setHorizontalHeaderLabels(headers)
         
@@ -61,13 +64,13 @@ class MarksEntry(QWidget):
 
         #* Populate courses
         courses = db.get_all_courses()
-        self.course_selection.addItem("Select Course")
+        self.course_selection.addItem(self.tr("Select Course"))
         for course_id, dept_id, course_name, description in courses:
             display = f"{course_name} (Dept {dept_id})"
             self.course_selection.addItem(display, userData=course_id)
         
         #* Populate exams/activities (initially empty until course is selected)
-        self.exam_selection.addItem("Select Exam/Activity")
+        self.exam_selection.addItem(self.tr("Select Exam/Activity"))
         
         logger.debug(f"Loaded {len(courses)} courses")
 
@@ -93,7 +96,7 @@ class MarksEntry(QWidget):
         
         if course_index == 0:  #* "Select Course" option
             self.exam_selection.clear()
-            self.exam_selection.addItem("Select Exam/Activity")
+            self.exam_selection.addItem(self.tr("Select Exam/Activity"))
             self.table.setRowCount(0)
             return
         
@@ -104,7 +107,7 @@ class MarksEntry(QWidget):
             exams = db.get_exams_by_course(course_id)
             
             self.exam_selection.clear()
-            self.exam_selection.addItem("Select Exam/Activity")
+            self.exam_selection.addItem(self.tr("Select Exam/Activity"))
             
             for exam_id, exam_type, duration, dept_id in exams:
                 display = f"{exam_type} ({duration} min)"
@@ -114,7 +117,7 @@ class MarksEntry(QWidget):
             
         except Exception as e:
             logger.error(f"Error loading exams: {e}")
-            QMessageBox.critical(self, "Error", f"Failed to load exams: {e}")
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to load exams:") +f" {e}")
 
     #* Load students enrolled in selected course with their marks
     def _load_students(self):
@@ -134,7 +137,7 @@ class MarksEntry(QWidget):
             logger.info(f"Loaded {len(self.students_data)} students for course {course_id}, exam {exam_id}")
         except Exception as e:
             logger.error(f"Error loading students: {e}")
-            QMessageBox.critical(self, "Error", f"Failed to load students: {e}")
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to load students:") +f" {e}")
 
     #* Display students in the table with editable mark fields
     def _display_students(self):
@@ -168,7 +171,7 @@ class MarksEntry(QWidget):
             
             #* New Mark (editable line edit)
             mark_input = QLineEdit()
-            mark_input.setPlaceholderText("Enter mark (0-20)")
+            mark_input.setPlaceholderText(self.tr("Enter mark (0-20)"))
             if current_mark is not None:
                 mark_input.setText(str(current_mark))
             
@@ -187,11 +190,11 @@ class MarksEntry(QWidget):
 
         #* Validate selections
         if self.course_selection.currentIndex() == 0:
-            QMessageBox.warning(self, "Validation Error", "Please select a course")
+            QMessageBox.warning(self, self.tr("Validation Error"), self.tr("Please select a course"))
             return
         
         if self.exam_selection.currentIndex() == 0:
-            QMessageBox.warning(self, "Validation Error", "Please select an exam/activity")
+            QMessageBox.warning(self, self.tr("Validation Error"), self.tr("Please select an exam/activity"))
             return
         
         course_id = self.course_selection.currentData()
@@ -234,11 +237,11 @@ class MarksEntry(QWidget):
         #* Show validation errors if any
         if invalid_marks:
             error_msg = "Invalid marks found:\n" + "\n".join(invalid_marks)
-            QMessageBox.warning(self, "Validation Error", error_msg)
+            QMessageBox.warning(self, self.tr("Validation Error"), error_msg)
             return
         
         if not marks_records:
-            QMessageBox.warning(self, "No Data", "No marks to save")
+            QMessageBox.warning(self, self.tr("No Data"), self.tr("No marks to save"))
             return
         
         logger.info(f"Attempting to save {len(marks_records)} marks")
@@ -250,17 +253,17 @@ class MarksEntry(QWidget):
             if success:
                 QMessageBox.information(
                     self, 
-                    "Success", 
-                    f"Marks saved successfully for {len(marks_records)} students!"
+                    self.tr("Success"), 
+                    self.tr(f"Marks saved successfully for") + f" {len(marks_records)} "+ self.tr("students!")
                 )
                 logger.info(f"Saved marks for course {course_id}, exam {exam_id}")
                 
                 #* Reload students to show updated marks
                 self._load_students()
             else:
-                QMessageBox.critical(self, "Error", "Failed to save marks - Database returned False")
+                QMessageBox.critical(self, self.tr("Error"),self.tr("Failed to save marks - Database returned False"))
                 logger.error("Database returned False for save_bulk_marks")
                 
         except Exception as e:
             logger.error(f"Error saving marks: {e}")
-            QMessageBox.critical(self, "Error", f"Failed to save marks: {e}")
+            QMessageBox.critical(self, self.tr("Error"), self.tr("Failed to save marks:")+ f" {e}")
