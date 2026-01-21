@@ -7,7 +7,7 @@ create type status as enum('present', 'absent');
 
 -- activity table
 create table activity (
-    activity_id int not null primary key,
+    activity_id BIGSERIAL not null primary key,
     Activity_Type Activity_type not null,
     reservation_id int not null,
     course_id int not null,
@@ -24,7 +24,7 @@ create table activity (
 
 -- exam table
 create table exam(
-    exam_id int not null primary key,
+    exam_id BIGSERIAL not null primary key,
     duration int not null , -- with minutes
     exam_type varchar(25) not null ,
     course_id int not null ,

@@ -2,7 +2,7 @@
 --? Create Department table
 
 CREATE TABLE Department (
-    Department_id INTEGER,
+    Department_id BIGSERIAL,
     name VARCHAR(25) NOT NULL,
     CONSTRAINT UN_Department_Name UNIQUE (name),
     CONSTRAINT PK_Department PRIMARY KEY (Department_id)
@@ -11,7 +11,7 @@ CREATE TABLE Department (
 --? Create Student table
 
 CREATE TABLE Student (
-    Student_ID INTEGER,
+    Student_ID BIGSERIAL,
     Last_Name VARCHAR(25) NOT NULL,
     First_Name VARCHAR(25) NOT NULL,
     DOB DATE NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE Student (
 --? Create Course table
 
 CREATE TABLE Course (
-    Course_ID INT4 NOT NULL,
+    Course_ID BIGSERIAL NOT NULL,
     Department_ID INT4 NOT NULL,
     name VARCHAR(60) NOT NULL,
     Description VARCHAR(1000),
@@ -42,7 +42,7 @@ CREATE TABLE Course (
 --? Create Instructor table
 
 CREATE TABLE Instructor (
-    Instructor_ID INTEGER,
+    Instructor_ID BIGSERIAL,
     Department_ID INTEGER NOT NULL,
     Last_Name VARCHAR(25) NOT NULL,
     First_Name VARCHAR(25) NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE Room (
 --? Create Reservation table
 
 CREATE TABLE Reservation (
-    Reservation_ID INTEGER,
+    Reservation_ID BIGSERIAL,
     Building VARCHAR(1) NOT NULL,
     RoomNo VARCHAR(10) NOT NULL,
     Course_ID INTEGER NOT NULL,
@@ -137,7 +137,7 @@ CREATE TABLE Enrollment (
 --? Create Mark table
 
 CREATE TABLE Mark (
-    Mark_ID SERIAL,
+    Mark_ID BIGSERIAL,
     Student_ID INTEGER NOT NULL,
     Course_ID INTEGER NOT NULL,
     Department_ID INTEGER NOT NULL,
