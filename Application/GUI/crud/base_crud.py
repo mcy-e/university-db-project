@@ -11,6 +11,8 @@ from Database import database as db
 
 from UTILS import constriants
 
+from GUI.styling import styling_loader as sl
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -38,6 +40,7 @@ class BaseCRUD(QWidget):
         self._build_form()
         self._connect_signals()
         self._disable_buttons()
+        sl.apply_button_styles(self,sl.CRUD_STYLES)
 
     #* Setup the table depending on columns
     def _setup_table(self):
@@ -90,14 +93,14 @@ class BaseCRUD(QWidget):
         for row, header in enumerate(self.headers):
             
             #* Create labels with there line edit object
-            label = QLabel(header)
+            label = QLabel(self.tr(header))
             line_edit = QLineEdit()
             
             #* Make ID fields read-only and visually distinct
             if self._is_id_field(header):
                 line_edit.setReadOnly(True)
                 line_edit.setStyleSheet("QLineEdit { background-color: #f0f0f0; color: #666; }")
-                line_edit.setPlaceholderText("Auto-generated")
+                line_edit.setPlaceholderText(self.tr("Auto-generated"))
 
             #* Add them to the layout 
             layout.addWidget(label, row, 0)
