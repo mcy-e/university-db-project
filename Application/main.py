@@ -13,8 +13,10 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 #& imports
 from pathlib import Path 
+from GUI.settings.settings import SettingsScreen
 from GUI.main_window import MainWindow
 from PyQt6.QtWidgets import QApplication
+from GUI.styling import styling_loader as sl
 from UTILS.log import setup_logging
 import logging
 
@@ -25,24 +27,19 @@ logger.info("Application started")
 BASE_DIR = Path(__file__).resolve().parent
 PATH_TO_DEFAULT_STYLE = BASE_DIR / "GUI" / "styling" / "default.qss"
 
-def load_stylesheet(app: QApplication, path: str):
-    try:
-        with open(path, "r", encoding="utf-8") as f:
-            stylesheet = f.read()
-        app.setStyleSheet(stylesheet)
-        logger.info(f"Stylesheet loaded: {path}")
-    except Exception as e:
-        logger.error(f"Failed to load stylesheet: {e}")
 
 def start():
     #* APP instance
     app = QApplication(sys.argv)
     
+    #* Load Language
+    SettingsScreen.load_language(app)
+    
     #* Set Fusion style 
     app.setStyle("Fusion")
     
     #* Load stylesheet
-    load_stylesheet(app, PATH_TO_DEFAULT_STYLE)
+    sl.load_stylesheet(app, PATH_TO_DEFAULT_STYLE)
    
     #* Window instance
     window = MainWindow()
