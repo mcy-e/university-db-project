@@ -25,6 +25,9 @@ from GUI.results import ResultViewer
 #? Screens Imports
 from UTILS.screen_enum import Screens
 
+#? Settings Screen Import
+from GUI.settings import SettingsScreen
+
 #? logger
 import logging
 
@@ -35,7 +38,7 @@ class MainWindow (QMainWindow):
     def __init__(self):
         super().__init__()
         #* Window Title
-        self.setWindowTitle("UniversityManagement")
+        self.setWindowTitle(self.tr("UniversityManagement"))
         
         #* Window Min Size
         self.setMinimumSize(600, 600)
@@ -95,6 +98,9 @@ class MainWindow (QMainWindow):
         #* Create Audit Viewer screen
         self.audit_viewer=AuditViewer()
 
+        #* Create Settings screen 
+        self.settings_screen=SettingsScreen()
+
         #* Add to stack
         self.stacked_widget.addWidget(self.home_screen) 
         self.stacked_widget.addWidget(self.crud_menu) 
@@ -118,9 +124,9 @@ class MainWindow (QMainWindow):
         self.stacked_widget.addWidget(self.result_viewer)
         self.stacked_widget.addWidget(self.query_viewer)
         self.stacked_widget.addWidget(self.audit_viewer)
+        self.stacked_widget.addWidget(self.settings_screen)
     
-        
-
+    
         #* Connect signals
         self._connect_home_signals()
 
@@ -128,19 +134,21 @@ class MainWindow (QMainWindow):
 
         #* Set as central widget
         self.setCentralWidget(self.stacked_widget)
-    
-    def _connect_back_buttons(self):
 
-        #? Connect all back navigation buttons
+    #* Connect all back navigation buttons    
+    def _connect_back_buttons(self):
         
         back_map = {
+            #* Back to Home Screen
             self.crud_menu.go_back: (Screens.HOME,"Home Screen Back"),
             self.academic_menu.go_back: (Screens.HOME,"Home Screen Back"),
             self.performance_menu.go_back: (Screens.HOME,"Home Screen Back"),
             self.result_viewer.go_back: (Screens.HOME,"Home Screen Back"),
             self.query_viewer.go_back: (Screens.HOME,"Home Screen Back"),
             self.audit_viewer.go_back: (Screens.HOME,"Home Screen Back"),
+            self.settings_screen.go_back: (Screens.HOME,"Home Screen Back"),
             
+            #* Back to Crud menu screen
             self.student_crud.go_back: (Screens.CRUD_MENU,"CRUD Menu Back"),
             self.instructor_crud.go_back: (Screens.CRUD_MENU,"CRUD Menu Back"),
             self.course_crud.go_back: (Screens.CRUD_MENU,"CRUD Menu Back"),    
@@ -152,8 +160,12 @@ class MainWindow (QMainWindow):
             self.activity_crud.go_back: (Screens.CRUD_MENU,"CRUD Menu Back"),
             self.exam_crud.go_back: (Screens.CRUD_MENU,"CRUD Menu Back"),
             self.attendance_crud.go_back: (Screens.CRUD_MENU,"CRUD Menu Back"),
+
+            #* Back to academic menu screen
             self.assign_instructor.go_back : (Screens.ACADEMIC_MENU, "ACADEMIC Menu Back"),
             self.manage_reservation.go_back : (Screens.ACADEMIC_MENU, "ACADEMIC Menu Back"),
+
+            #* Back to performance menu screen
             self.attendance_entry.go_back : (Screens.PERFORMANCE_MENU, "PERFORMANCE Menu Back"),
             self.marks_entry.go_back : (Screens.PERFORMANCE_MENU, "PERFORMANCE Menu Back")
         }
@@ -162,10 +174,9 @@ class MainWindow (QMainWindow):
             signal.connect(lambda s=screen, m=log_msg: self._navigate(s, m))
         
 
-   
+    #* Connect all home screen navigation buttons   
     def _connect_home_signals(self):
 
-        #? Connect all home screen navigation buttons
 
         navigation_map = {
 
@@ -176,7 +187,7 @@ class MainWindow (QMainWindow):
             self.home_screen.navigate_to_results: (Screens.RESULTS_VIEWER, "Results Viewer"),
             self.home_screen.navigate_to_queries: (Screens.QUERY_VIEWER, "Queries Viewer"),
             self.home_screen.navigate_to_audit: (Screens.AUDIT_VIEWER, "Audit Viewer"),
-            self.home_screen.navigate_to_settings: (None, "Settings"),
+            self.home_screen.navigate_to_settings: (Screens.SETTINGS_SCREEN, "Settings"),
             self.home_screen.open_side_bar: (None, "Side Bar"),
 
             #* Crud menu navigation dict
@@ -204,10 +215,10 @@ class MainWindow (QMainWindow):
         for signal, (screen, log_msg) in navigation_map.items():
             signal.connect(lambda s=screen, m=log_msg: self._navigate(s, m))
 
+
+    #* Navigate and Generate Log Message
     def _navigate(self, screen_index, log_message):
         
-        #? Navigate and Generate Log Message
-
         logger.debug(f"Opening {log_message}...")
         if screen_index is not None:
             self.stacked_widget.setCurrentIndex(screen_index)
