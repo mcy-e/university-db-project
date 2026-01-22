@@ -1,6 +1,6 @@
 # University Database Management System - Technical Documentation
 
-> **Note**: This project is available on GitHub. Visit the repository for complete source code and updates.
+> **Note**: This project is available on GitHub. Visit the repository for complete source code code,better documentation viewing,version control and updates.
 
 ## Table of Contents
 
