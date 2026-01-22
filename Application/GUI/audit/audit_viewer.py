@@ -101,19 +101,25 @@ class AuditViewer(QWidget):
         self._filter_logs()
 
     #* Display logs in the table
+    #* Display logs in the table
     def _display_logs(self, logs):
  
         self.table.setRowCount(0)
         
         for row_idx, log in enumerate(logs):
-            timestamp, user, action, table, details = log
+            table_name, log_id, operation_type, timestamp, details = log
             
             self.table.insertRow(row_idx)
             
-            self.table.setItem(row_idx, 0, QTableWidgetItem(timestamp))
-            self.table.setItem(row_idx, 1, QTableWidgetItem(user))
-            self.table.setItem(row_idx, 2, QTableWidgetItem(action))
-            self.table.setItem(row_idx, 3, QTableWidgetItem(table))
+            #*Timestamp
+            self.table.setItem(row_idx, 0, QTableWidgetItem(str(timestamp)))
+            #*User 
+            self.table.setItem(row_idx, 1, QTableWidgetItem(f"Log #{log_id}"))
+            #* Action (operation type)
+            self.table.setItem(row_idx, 2, QTableWidgetItem(operation_type))
+            #*Table
+            self.table.setItem(row_idx, 3, QTableWidgetItem(table_name.capitalize()))
+            #* Details
             self.table.setItem(row_idx, 4, QTableWidgetItem(details))
         
         logger.debug(f"Displayed {len(logs)} logs in table")

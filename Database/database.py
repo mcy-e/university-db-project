@@ -1202,20 +1202,45 @@ def execute_query(query_name, params=None):
 
 #? AUDIT OPERATIONS
 
-
 def get_audit_logs(from_date, to_date, table_name):
     """
     Retrieve audit logs filtered by date range and table
     """
     try:
-        if "mark" in table_name.lower():
-            return eq("SELECT logid, operationtype, operationtime, description FROM mark_audit_log WHERE operationtime BETWEEN %s AND %s ORDER BY operationtime DESC;", (from_date, to_date), fetch=True)
+        if table_name is None or table_name.lower() == "all tables":
+            mark_logs = eq(
+                "SELECT 'mark' as table_name, logid, operationtype, operationtime, description FROM mark_audit_log WHERE operationtime BETWEEN %s AND %s", 
+                (from_date, to_date), 
+                fetch=True
+            ) or []
+            
+            attendance_logs = eq(
+                "SELECT 'attendance' as table_name, logid, operationtype, operationtime, description FROM attendance_audit_log WHERE operationtime BETWEEN %s AND %s", 
+                (from_date, to_date), 
+                fetch=True
+            ) or []
+            all_logs = list(mark_logs) + list(attendance_logs)
+            all_logs.sort(key=lambda x: x[3], reverse=True)  
+            return all_logs
+            
+        elif "mark" in table_name.lower():
+            result = eq(
+                "SELECT 'mark' as table_name, logid, operationtype, operationtime, description FROM mark_audit_log WHERE operationtime BETWEEN %s AND %s ORDER BY operationtime DESC;", 
+                (from_date, to_date), 
+                fetch=True
+            )
+            return result or []
         else:
-            return eq("SELECT logid, operationtype, operationtime, description FROM attendance_audit_log WHERE operationtime BETWEEN %s AND %s ORDER BY operationtime DESC;", (from_date, to_date), fetch=True)
+            result = eq(
+                "SELECT 'attendance' as table_name, logid, operationtype, operationtime, description FROM attendance_audit_log WHERE operationtime BETWEEN %s AND %s ORDER BY operationtime DESC;", 
+                (from_date, to_date), 
+                fetch=True
+            )
+            return result or []
     except Exception as e:
         logger.error(f"Error getting audit logs: {e}")
         return []
-
+    
 
 def get_table_names():
     """
