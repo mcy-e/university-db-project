@@ -16,20 +16,15 @@ class DatabaseConnection:
     _connection_pool = None
     
     @classmethod
-    def initialize_pool(cls, database:str, user:str, password:str, host="localhost", port="5432", minconn=1, maxconn=10):
+    def initialize_pool(cls, database, user, password, host="localhost", port="5432", minconn=1, maxconn=10, **kwargs):
         """
         Initialize the connection pool
-        
-        Args:
-            database (str): Database name
-            user (str): Database user
-            password (str): Database password
-            host (str): Database host (default: localhost)
-            port (str): Database port (default: 5432)
-            minconn (int): Minimum connections in pool
-            maxconn (int): Maximum connections in pool
         """
         try:
+
+            if 'sslmode' not in kwargs:
+                kwargs['sslmode'] = 'require'
+                
             cls._connection_pool = psycopg2.pool.SimpleConnectionPool(
                 minconn,
                 maxconn,
@@ -37,7 +32,8 @@ class DatabaseConnection:
                 user=user,
                 password=password,
                 host=host,
-                port=port
+                port=port,
+                **kwargs
             )
             logger.info("Database connection pool created successfully")
         except Exception as e:
