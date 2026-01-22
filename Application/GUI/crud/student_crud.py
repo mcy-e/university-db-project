@@ -5,7 +5,6 @@ from PyQt6.QtCore import pyqtSignal
 from .base_crud import BaseCRUD
 
 from Database import database as db
-DATA=db.get_all_students()
 
 class StudentCRUD(BaseCRUD):
 
@@ -25,7 +24,7 @@ class StudentCRUD(BaseCRUD):
         header=["Student_ID", "Last_Name", "First_Name", "DOB", "Address", "City", "Zip_Code", "Phone", "Fax", "Email", "Group_ID", "Section_ID"]
         
         super().__init__(header,db_operations)
-        self.populate_table(DATA)
+        self.populate_table(db.get_all_students())
         self.back_btn.clicked.connect(self.go_back.emit)
 
     def _is_id_field(self, header):

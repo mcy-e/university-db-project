@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QComboBox, QLabel, QLineEdit, QGridLayout, QWidget
 from .base_crud import BaseCRUD
 
 from Database import database as db
-DATA=db.get_all_attendance()
+
 class AttendanceCRUD(BaseCRUD):
 
     
@@ -20,7 +20,7 @@ class AttendanceCRUD(BaseCRUD):
         }
         header=["Student_ID", "Activity_ID", "Attendance_Date", "Status"]
         super().__init__(header, db_operations)
-        self.populate_table(DATA)
+        self.populate_table(db.get_all_attendances())
         self.back_btn.clicked.connect(self.go_back.emit)
 
     #* Override to add dropdown for Status

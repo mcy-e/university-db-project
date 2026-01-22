@@ -13,7 +13,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 #* Path to ui file for query viewer
-PATH_TO_UI = "Application/GUI/UI/query_viewer.ui"
+from config import get_resource_path
+import os
+PATH_TO_UI = get_resource_path(os.path.join("GUI", "UI", "query_viewer.ui"))
+
 
 class QueryViewer(QWidget):
 

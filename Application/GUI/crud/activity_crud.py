@@ -6,7 +6,6 @@ from .base_crud import BaseCRUD
 
 from Database import database as db
 
-DATA=db.get_all_activities()
 
 class ActivityCRUD(BaseCRUD):
 
@@ -23,7 +22,7 @@ class ActivityCRUD(BaseCRUD):
         header=["Activity_ID", "Activity_Type", "Reservation_ID", "Course_ID", "Department_ID"]
         super().__init__(header, db_operations)
 
-        self.populate_table(DATA)
+        self.populate_table(db.get_all_activities())
         self.back_btn.clicked.connect(self.go_back.emit)
 
     #* Override to add dropdown for Activity_Type

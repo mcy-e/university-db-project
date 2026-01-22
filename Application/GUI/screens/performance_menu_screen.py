@@ -15,8 +15,9 @@ logger = logging.getLogger(__name__)
 
 
 #* Path to ui file for the academic menu
-PATH_TO_UI = "Application/GUI/UI/performance_menu.ui"
-
+from config import get_resource_path
+import os
+PATH_TO_UI = get_resource_path(os.path.join("GUI", "UI", "performance_menu.ui"))
 
 
 class PerformanceMenu(QWidget):

@@ -19,7 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 #* Path to ui file for the crud
-PATH_TO_UI = "Application/GUI/UI/CRUD.ui"
+from config import get_resource_path
+import os
+PATH_TO_UI = get_resource_path(os.path.join("GUI", "UI", "CRUD.ui"))
+
 
 # TODO : Change the way of getting all data and make it dynamic in the base class
 

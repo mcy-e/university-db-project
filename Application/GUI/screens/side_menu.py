@@ -10,7 +10,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 #* Path to ui file for side menu
-PATH_TO_UI = "Application/GUI/UI/side_menu.ui"
+from config import get_resource_path
+import os
+PATH_TO_UI = get_resource_path(os.path.join("GUI", "UI", "side_menu.ui"))
+
 
 class SideMenu(QWidget):
     
@@ -67,7 +70,7 @@ class SideMenu(QWidget):
         about_text = f""" 
             <h2>{self.tr("University Management System")}</h2>
             <p><b style="color: #ff9800;">{self.tr("BETA VERSION")}</b></p>
-            <p>{self.tr("A comprehensive system for managing university operations including student records, academic management, performance tracking, and results processing.")}</p>
+            <p>{self.tr("A comprehensive system for managing university operations including student records, academic management, performance tracking, and results processing. Note that the data is mockup for beta testing")}</p>
             
             <h3>{self.tr("Current Features:")}</h3>
             <ul>

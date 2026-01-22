@@ -31,11 +31,19 @@ import logging
 logger = logging.getLogger(__name__)
 
 #* Path to UI file and settings storage
-PATH_TO_UI = "Application/GUI/UI/settings.ui"
+from config import get_resource_path
+import os
+PATH_TO_UI = get_resource_path(os.path.join("GUI", "UI", "settings.ui"))
 
-SETTINGS_FILE = "app_settings.json"
+if getattr(sys, 'frozen', False):
+    base_dir = Path(sys.executable).parent
+else:
+    base_dir = Path(__file__).resolve().parent
 
-STYLING_DIR = Path("Application/GUI/styling")
+SETTINGS_FILE = str(base_dir / "app_settings.json")
+
+
+STYLING_DIR = Path(get_resource_path(os.path.join("GUI", "styling")))
 
 class SettingsScreen(QWidget):
     
@@ -63,7 +71,7 @@ class SettingsScreen(QWidget):
         "12-hour (hh:MM AM/PM)": "%I:%M %p"
     }
     
-    LANGUAGE_DIR = Path("Application/Translations")
+    LANGUAGE_DIR = Path(get_resource_path("Translations"))
 
     LANGUAGE_FILES = {
         "English": None, 

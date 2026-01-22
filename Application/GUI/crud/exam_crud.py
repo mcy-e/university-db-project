@@ -5,8 +5,6 @@ from .base_crud import BaseCRUD
 
 from Database import database  as db 
 
-DATA=db.get_all_exams()
-
 class ExamCRUD(BaseCRUD):
 
     
@@ -22,6 +20,6 @@ class ExamCRUD(BaseCRUD):
         header=["Exam_ID", "Duration", "Exam_Type", "Course_ID", "Department_ID"]
         super().__init__(header, db_operations)
 
-        self.populate_table(DATA)
+        self.populate_table(db.get_all_exams())
         self.back_btn.clicked.connect(self.go_back.emit)
 

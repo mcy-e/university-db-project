@@ -11,7 +11,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 #* Path to ui file for home screen
-PATH_TO_UI = "Application/GUI/UI/home_screen.ui"
+from config import get_resource_path
+import os
+PATH_TO_UI = get_resource_path(os.path.join("GUI", "UI", "home_screen.ui"))
 
 class HomeScreen(QWidget):
     

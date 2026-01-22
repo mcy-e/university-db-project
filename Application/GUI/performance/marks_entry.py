@@ -15,7 +15,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 #* Path to ui file for marks entry
-PATH_TO_UI = "Application/GUI/UI/marks_entry.ui"
+from config import get_resource_path
+import os
+PATH_TO_UI = get_resource_path(os.path.join("GUI", "UI", "marks_entry.ui"))
+
 
 class MarksEntry(QWidget):
     

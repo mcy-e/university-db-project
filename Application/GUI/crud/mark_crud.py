@@ -5,8 +5,6 @@ from .base_crud import BaseCRUD
 
 from Database import database as db 
 
-DATA=db.get_all_marks()
-
 class MarkCRUD(BaseCRUD):
 
     
@@ -23,5 +21,5 @@ class MarkCRUD(BaseCRUD):
         header=["Mark_ID", "Student_ID", "Course_ID", "Department_ID", "Mark_Value", "Mark_Date"]
         super().__init__(header, db_operations)
         
-        self.populate_table(DATA)
+        self.populate_table(db.get_all_marks())
         self.back_btn.clicked.connect(self.go_back.emit)

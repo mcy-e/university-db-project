@@ -9,7 +9,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 #* Path to ui file for CRUD menu screen
-PATH_TO_UI = "Application/GUI/UI/crud_menu_screen.ui"
+
+from config import get_resource_path
+import os
+PATH_TO_UI = get_resource_path(os.path.join("GUI", "UI", "crud_menu_screen.ui"))
+
 
 class CRUDMenuScreen(QWidget):
     

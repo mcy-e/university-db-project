@@ -4,8 +4,6 @@ from PyQt6.QtCore import pyqtSignal
 from .base_crud import BaseCRUD
 from Database import database as db
 
-DATA=db.get_all_rooms()
-
 class RoomCRUD(BaseCRUD):
 
     
@@ -22,6 +20,6 @@ class RoomCRUD(BaseCRUD):
         header=["Building", "RoomNo", "Capacity"]
         super().__init__(header, db_operations)
         
-        self.populate_table(DATA)
+        self.populate_table(db.get_all_rooms())
         self.back_btn.clicked.connect(self.go_back.emit)
 

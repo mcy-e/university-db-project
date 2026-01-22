@@ -6,7 +6,7 @@ from .base_crud import BaseCRUD
 
 from Database import database  as db 
 
-DATA=db.get_all_instructors()
+
 class InstructorCRUD(BaseCRUD):
 
     
@@ -24,7 +24,7 @@ class InstructorCRUD(BaseCRUD):
         header=["Instructor_ID", "Department_ID", "Last_Name", "First_Name", "Rank", "Phone", "Fax", "Email"]
         super().__init__(header,db_operations)
         
-        self.populate_table(DATA)
+        self.populate_table(db.get_all_instructors())
         self.back_btn.clicked.connect(self.go_back.emit)
 
 

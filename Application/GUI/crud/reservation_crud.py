@@ -3,7 +3,7 @@ from PyQt6.QtCore import pyqtSignal
 
 from .base_crud import BaseCRUD
 from Database import database as db
-DATA=db.get_all_reservations()
+
 
 class ReservationCRUD(BaseCRUD):
 
@@ -22,6 +22,6 @@ class ReservationCRUD(BaseCRUD):
         header=["Reservation_ID", "Building", "RoomNo", "Course_ID", "Department_ID", "Instructor_ID", "Reserv_Date", "Start_Time", "End_Time", "Hours_Number"]
         super().__init__(header, db_operations)
 
-        self.populate_table(DATA)
+        self.populate_table(db.get_all_reservations())
         self.back_btn.clicked.connect(self.go_back.emit)
 

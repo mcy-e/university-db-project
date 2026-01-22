@@ -15,7 +15,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 #* Path to ui file for instructor assignment
-PATH_TO_UI = "Application/GUI/UI/IC_Assignments.ui"
+from config import get_resource_path
+import os
+PATH_TO_UI = get_resource_path(os.path.join("GUI", "UI", "IC_Assignments.ui"))
+
 
 from Database import database as db
 

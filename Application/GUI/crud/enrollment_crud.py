@@ -5,8 +5,6 @@ from .base_crud import BaseCRUD
 
 from Database import database as db 
 
-DATA=db.get_all_enrollments()
-
 class EnrollmentCRUD(BaseCRUD):
 
     
@@ -24,6 +22,6 @@ class EnrollmentCRUD(BaseCRUD):
         super().__init__(header, db_operations)
     
         
-        self.populate_table(DATA)
+        self.populate_table(db.get_all_enrollments())
         self.back_btn.clicked.connect(self.go_back.emit)
 

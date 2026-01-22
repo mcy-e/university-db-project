@@ -14,7 +14,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 #* Path to ui file for reservation management
-PATH_TO_UI = "Application/GUI/UI/Reservation_Management.ui"
+from config import get_resource_path
+import os
+PATH_TO_UI = get_resource_path(os.path.join("GUI", "UI", "Reservation_Management.ui"))
+
 
 #* Working hours constraints
 WORK_START_TIME = QTime(8, 0)   # 8:00 AM
