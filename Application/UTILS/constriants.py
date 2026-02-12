@@ -34,7 +34,7 @@ def check_constraint(field_name, value):
     
     #* NUMERIC VALIDATIONS
     
-    if field_name in ["Group_ID", "Section_ID", "Department_ID", "Course_ID", 
+    if field_name in ["Group_ID", "Department_ID", "Course_ID", 
                       "Instructor_ID", "Capacity", "Hours_Number", "Duration",
                       "Mark_ID", "Exam_ID", "Activity_ID", "Reservation_ID"]:
         if value and not value.isdigit():
