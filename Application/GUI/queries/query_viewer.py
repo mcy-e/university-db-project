@@ -3,7 +3,7 @@
 from PyQt6 import uic
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import (
-    QWidget, QHeaderView, QTableWidgetItem, QMessageBox
+    QWidget, QHeaderView, QTableWidgetItem, QMessageBox, QInputDialog
 )
 
 from Database import database as db
@@ -71,8 +71,32 @@ class QueryViewer(QWidget):
         
         query_name = self.query_selection.currentText()
         
+        params = None
+        
+        #* Handle parameterized queries
+        if query_name == "Students by Group":
+            group_id, ok = QInputDialog.getInt(self, self.tr("Input"), self.tr("Enter Group ID:"))
+            if ok:
+                params = group_id
+            else:
+                return
+                
+        elif query_name == "Students by Section":
+            section_id, ok = QInputDialog.getText(self, self.tr("Input"), self.tr("Enter Section ID:"))
+            if ok and section_id:
+                params = section_id.strip()
+            else:
+                return
+                
+        elif query_name == "Instructor Timetable":
+            inst_id, ok = QInputDialog.getInt(self, self.tr("Input"), self.tr("Enter Instructor ID:"))
+            if ok:
+                params = inst_id
+            else:
+                return
+
         try:
-            headers, data = db.execute_query(query_name)
+            headers, data = db.execute_query(query_name, params)
             self._display_results(headers, data)
             
             self.state.setText(self.tr("Success ") + f"{len(data)}" +self.tr ("rows"))
