@@ -100,7 +100,7 @@ def check_constraint(field_name, value):
     #* ZIP CODE VALIDATION
     
     if field_name == "Zip_Code" and value:
-        if not value.isdigit() or len(value) != 6:
+        if not value.isdigit() or len(value) != 5:
             return False, "Zip code must be 6 digits"
     
     
